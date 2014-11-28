@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+IFACE=${2:-eth0}
+CONF=${3:-/etc/${0##*/}.conf}
+export DESC="Internet daemon"
+export ARGS="-f -e $CONF"
+export HELP="[CONF=/etc/${0##*/}.conf]"
+/usr/share/init.d/${0##*/} $*
