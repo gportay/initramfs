@@ -1,6 +1,8 @@
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
+export LDFLAGS ?= -static
+
 .SILENT: initramfs.cpio
 
 .PHONY: all initramfs.cpio clean
@@ -22,6 +24,13 @@ packages	+= install-initramfs/networking.tgz
 ifneq (0,${INET})
 packages	+= install-initramfs/inetd.tgz
 endif
+endif
+
+ifneq (0,${BUSYBOX})
+packages	+= install-initramfs/busybox.tgz
+clean		+= busybox_clean
+mrproper	+= busybox_mrproper
+include busybox.inc
 endif
 
 install-initramfs/%.tgz:
