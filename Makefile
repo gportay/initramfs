@@ -13,6 +13,10 @@ ifneq (0,${PROFILE})
 packages	+= install-initramfs/profile.tgz
 endif
 
+ifneq (0,${RC_LOCAL})
+packages	+= install-initramfs/rc.local.tgz
+endif
+
 install-initramfs/%.tgz:
 	@echo -e "\e[1mBuilding package $*...\e[0m"
 	( cd packages-initramfs/$* && tar czf ../../$@ --exclude=.gitignore * )
