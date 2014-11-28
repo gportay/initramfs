@@ -1,0 +1,7 @@
+#!/bin/sh -e
+
+service=${0##*/}
+service=${service:2}
+run=stop
+[ "$1" = "up" ] && run=start
+/etc/init.d/$service $run $interface

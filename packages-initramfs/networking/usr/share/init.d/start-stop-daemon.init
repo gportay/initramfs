@@ -1,0 +1,63 @@
+#!/bin/sh -e
+
+DAEMON=$(which ${0##*/})
+NAME=${NAME:-$0}
+DAEMONUSER=${DAEMONUSER:-root}
+PIDDIR=${PIDDIR:-/var/run}
+PIDFILE=${PIDFILE:-$PIDDIR/${0##*/}.pid}
+DESC=${DESC:-$DAEMON}
+
+case "$1" in
+start)
+	shift
+	echo -n "starting $DESC: $NAME... "
+	if ! start-stop-daemon --start --pidfile $PIDFILE --make-pidfile \
+		--background --chuid $DAEMONUSER --exec $DAEMON -- $ARGS ; then
+		echo "failed."
+	fi
+	echo "done."
+	;;
+stop)
+	shift
+	echo -n "stopping $DESC: $NAME... "
+	if ! start-stop-daemon --stop --pidfile $PIDFILE >/dev/null; then
+		echo "already stopped!"
+	fi
+	rm -f $PIDFILE
+	echo "done."
+	;;
+restart|reload)
+	shift
+	echo -n "restarting $DESC: $NAME... "
+	$0 stop >/dev/null
+	$0 start >/dev/null
+	echo "done."
+	;;
+status|wait)
+	shift
+	pid=$(cat $PIDFILE 2>/dev/null || echo)
+	if [ -z "$pid" ] || (
+	   	[ "$(readlink /proc/$pid/exe)" != $DAEMON ] ||
+	   	[ "$(cat /proc/$pid/comm 2>/dev/null)" != ${DAEMON##*/} ] ); then
+		exit 1
+	fi
+	if [ "$1" = wait ]; then
+		wait $pid
+	else
+		echo "$pid"
+	fi
+	;;
+foreground)
+	shift
+	$0 stop && $0 wait
+	echo "running $DESC: $NAME... "
+	start-stop-daemon --start --pidfile $PIDFILE --make-pidfile \
+		--chuid $DAEMONUSER --exec $DAEMON -- ${*:-$ARGS}
+	rm -f $PIDFILE
+	echo "terminated."
+	;;
+*)
+	echo "Usage: ${0##*/} {start|stop|restart|reload|status|wait|foreground} $HELP" >&2
+	exit 1
+	;;
+esac

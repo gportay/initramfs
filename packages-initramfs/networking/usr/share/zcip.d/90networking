@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+[ "$1" != config ] && exit 0
+
+mask=16 broadcast=169.254.255.255 /usr/share/networking.action zeroconf link-local

@@ -1,0 +1,48 @@
+#!/bin/sh -e
+
+IFACE=${2:-eth0}
+ETHMAC=$(echo "$3" | grep -E '^[a-fA-F0-9]{2,2}:[a-fA-F0-9]{2,2}:[a-fA-F0-9]{2,2}:[a-fA-F0-9]{2,2}:[a-fA-F0-9]{2,2}:[a-fA-F0-9]{2,2}$' || true)
+IP=$(echo "$4" | grep -E '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$' || true)
+BROADCAST=$(echo "$5" | grep -E '^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$' || true)
+SUBNET=$6
+NAME="interface $IFACE"
+DESC="Networking interface setup"
+
+case "$1" in
+start)
+	shift
+	echo -n "starting $DESC: $NAME... "
+	if ! ip -o link show up | grep -q $IFACE; then
+		[ -n "$ETHMAC" ] && ip link set addr $ETHMAC dev $IFACE
+		ip link set dev $IFACE up
+	fi
+
+	if [ -n "$IP" ]; then
+		interface=$IFACE ip=$IP broadcast=$BROADCAST subnet=$SUBNET /usr/share/udhcpc.action bound
+	else
+		/etc/init.d/ifplugd start $IFACE
+	fi
+	echo "done."
+	;;
+stop)
+	shift
+	echo -n "stopping $DESC: $NAME... "
+	/etc/init.d/ifplugd stop $IFACE
+	ip link set dev $IFACE down
+	echo "done."
+	;;
+restart|reload)
+	shift
+	echo -n "restarting $DESC: $NAME... "
+	$0 stop >/dev/null
+	$0 start >/dev/null
+	echo "done."
+	;;
+status|wait)
+	/etc/init.d/ifplugd $1 $IFACE
+	;;
+*)
+	echo "Usage: ${0##*/} {start|stop|restart|reload|status|wait} [IFACE=eth0] [ETHMAC] [IP] [BROADCAST] [SUBNET]" >&2
+	exit 1
+	;;
+esac

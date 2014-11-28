@@ -1,0 +1,10 @@
+#!/bin/sh -e
+
+IFACE=${2:-eth0}
+SCRIPT=${3:-/usr/share/udhcpc/default.script}
+NAME="interface $IFACE" \
+DESC="DHCP client service" \
+ARGS="-f -R -i $IFACE -T 5 -t 0 -A 60 -S $SCRIPT" \
+PIDFILE="/var/run/${0##*/}-$IFACE.pid" \
+HELP="[IFACE=eth0] [SCRIPT=/usr/share/${0##*/}.action]" \
+/usr/share/init.d/${0##*/} $*
