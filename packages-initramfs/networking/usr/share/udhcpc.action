@@ -1,0 +1,3 @@
+#!/bin/sh -e
+
+run-parts --exit-on-error --arg $1 /usr/share/udhcpc.d/

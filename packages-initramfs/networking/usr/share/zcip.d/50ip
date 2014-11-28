@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# zcip script inspired from udhcpc script edited by Tim Riker <Tim@Rikers.org>
+
+[ -z "$1" ] && echo "Error: should be called from zcip" && exit 1
+
+case "$1" in
+	deconfig)
+		if grep -q -v ip= /proc/cmdline; then
+			ip addr flush dev $interface
+			ip link set dev $interface up
+		fi
+
+		if grep -q -v nfsroot= /proc/cmdline; then
+			ip addr flush dev $interface
+			ip link set dev $interface up
+		fi
+		;;
+
+	config)
+		ip addr add dev $interface local $ip/16  broadcast 169.254.255.255
+
+		echo "deleting routes"
+		ip route | while read line ; do
+			while ip route del $line ; do
+				:
+			done
+		done
+
+		ip route add 169.254.0.0/16 dev $interface
+		;;
+esac
+
+exit 0

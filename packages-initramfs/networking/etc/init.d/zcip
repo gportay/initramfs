@@ -1,0 +1,33 @@
+#!/bin/sh -e
+
+IFACE=${2:-eth0}
+PIDDIR=${PIDDIR:-/var/run}
+PIDFILE=$PIDDIR/${0##*/}-$IFACE.pid
+SCRIPT=/usr/share/${0##*/}.action
+ARGS="-f -q $IFACE $SCRIPT"
+
+case "$1" in
+start)
+	if [ -f $PIDFILE ]; then
+		pid=$(cat $PIDFILE 2>/dev/null || echo 0)
+		comm=$(cat /proc/$pid/comm 2>/dev/null || echo comm)
+	fi
+	[ ${comm:-comm} != ${0##*/} ] && ${0##*/} $ARGS & echo $! >$PIDFILE
+	;;
+stop)
+	if [ -f $PIDFILE ]; then
+		pid=$(cat $PIDFILE 2>/dev/null || echo '0')
+		comm=$(cat /proc/$pid/comm 2>/dev/null || echo comm)
+		[ ${comm:-comm} = ${0##*/} ] && kill $pid
+		rm $PIDFILE
+	fi
+	;;
+restart)
+	$0 stop
+	$0 start
+	;;
+*)
+	echo "Error: ${0##*/} start|stop|restart [IFACE]" >&2
+	exit 1
+	;;
+esac

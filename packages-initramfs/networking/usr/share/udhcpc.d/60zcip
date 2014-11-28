@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+if [ "$1" = "bound" -o "$1" = "renew" ]; then
+	/etc/init.d/zcip stop
+fi

@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+service=${0##*/}
+service=${service:2}
+iface=${0%/*}
+iface=${iface##*/}
+run=stop
+[ "$1" = "up" ] && run=start
+/etc/init.d/$service $run $iface
