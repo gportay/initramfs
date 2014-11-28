@@ -1,0 +1,106 @@
+#!/bin/sh -e
+
+VERSION=0.1
+export PATH=/usr/bin:/usr/sbin:/bin:/sbin
+export ETHMAC=$(cat /etc/security/ethmac 2>/dev/null || echo "F8:81:1A:00:00:00")
+
+die() {
+	echo "Error: $*" >&2
+	exit 1
+}
+
+usage() {
+	cat <<EOF
+Usage: ${0##*/} [OPTIONS] [RUNLEVEL]
+
+Options:
+ -b or emergency        Single user mode boot.
+ -s or -S or single     Boot directly into a single user shell without running
+                        and other startup scripts.
+ -D or --debug          Turn on debug mode.
+ -q or --quiet          Turn off verbosity.
+ -v or --verbose        Turn on verbosity.
+ -h or --help           Display this message.
+ -V or --version        Display the version.
+EOF
+}
+
+# Mount the Linux kernel virtual filesystems
+[ -d '/proc/1' ]                  || mount /proc    || mount -t proc     none /proc
+grep -Eq '/sys '     /proc/mounts || mount /sys     || mount -t sysfs    none /sys
+
+# Ensure devtmpfs is mounted, it must be done manually with initramfs
+grep -Eq '/dev '     /proc/mounts || mount /dev     || mount -t tmpfs    none /dev
+
+# Setup PTY infrastructure
+mkdir -p /dev/pts
+grep -Eq '/dev/pts ' /proc/mounts || mount /dev/pts || mount -t devpts   none /dev/pts
+
+# Populate device mount point
+echo /sbin/mdev >/proc/sys/kernel/hotplug
+mdev -s
+
+# Ensure tmp is RAM
+grep -Eq '/tmp '     /proc/mounts || mount /tmp     || mount -t tmpfs    none /tmp
+
+# Execute a getty in case of emergency
+oops() {
+	[ $? -eq 0 ] && return
+
+	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
+	[ -n "$console" ] || die "Oops, init is about to exit!"
+
+	tty=$(echo "$console" | cut -d, -f1)
+	baudrate=$(echo "$console" | cut -d, -f2)
+	while /sbin/getty $tty ${baudrate:-115200}; do
+		echo "Getty exited with \$?! respawning..."
+		sleep 1
+	done
+}
+trap oops 0
+
+while [ $# -ne 0 ]; do
+	if [ "$1" = -h ] || [ "$1" = --help ]; then
+		usage
+		exit 0
+	elif [ "$1" = "-V" ] || [ "$1" = "--version" ] ; then
+		echo $VERSION
+		exit 0
+	elif [ "$1" = -D ] || [ "$1" = debug ]; then
+		export DEBUG=1
+	elif [ "$1" = -v ] || [ "$1" = verbose ]; then
+		export VERBOSE=1
+	elif [ "$1" = -q ] || [ "$1" = quiet ]; then
+		export QUIET=1
+	elif echo "$1" | grep -qE "^[a-zA-Z0-9_]+="; then
+		var=$(echo $1 | cut -d= -f1)
+		val=$(echo $1 | cut -d= -f2)
+		export $var=$val
+	elif [ "$1" = -b ] || [ "$1" = emergency ]; then
+		mode=emergency
+	elif [ "$1" = -s ] || [ "$1" = single ]; then
+		mode=single
+	elif [ -z "$runlevel" ]; then
+		if echo "$1" | grep -E "^[0-6]$"; then
+			runlevel=$1
+		elif echo "$1" | grep -E "^[Ss]$"; then
+			mode=single
+			runlevel=$1
+		else
+			die "Unknown run-level $1!"
+		fi
+	else
+		usage
+		die "Too many arguments!"
+	fi
+	shift
+done
+runlevel=${runlevel:-5}
+
+case $mode in
+emergency) exec /bin/sh;;
+single)    exec /sbin/sulogin;;
+*)         [ -x /etc/rc.local ] && exec /etc/rc.local $runlevel;;
+esac
+
+exit 1
