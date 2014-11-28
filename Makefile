@@ -1,6 +1,8 @@
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
+export LDFLAGS ?= -static
+
 all: initramfs.cpio
 
 packages ?= install-initramfs/ramfs.tgz

@@ -9,3 +9,10 @@ packages	+= install-initramfs/inetd.tgz
 endif
 endif
 
+ifneq (0,${BUSYBOX})
+packages	+= install-initramfs/busybox.tgz
+clean		+= busybox_clean
+mrproper	+= busybox_mrproper
+include busybox.inc
+endif
+
