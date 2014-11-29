@@ -2,3 +2,4 @@
 install-initramfs/
 packages-initramfs/busybox/
 packages-initramfs/input-event.d/
+packages-initramfs/kexec-tools/

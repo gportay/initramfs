@@ -1,9 +1,13 @@
+PREFIX ?= /usr
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
+
+prefix := $(PREFIX)
 
 export LDFLAGS ?= -static
 ifdef CROSS_COMPILE
 export CC = $(CROSS_COMPILE)gcc
+host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 endif
 
 all: initramfs.cpio

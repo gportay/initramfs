@@ -22,3 +22,9 @@ clean		+= input-eventd_clean
 mrproper	+= input-eventd_mrproper
 endif
 
+ifeq (1,${KEXEC_TOOLS})
+packages	+= install-initramfs/kexec-tools.tgz
+clean		+= kexec-tools_clean
+mrproper	+= kexec-tools_mrproper
+endif
+
