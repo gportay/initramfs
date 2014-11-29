@@ -1,9 +1,13 @@
+PREFIX ?= /usr
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
+
+prefix := $(PREFIX)
 
 export LDFLAGS ?= -static
 ifdef CROSS_COMPILE
 export CC = $(CROSS_COMPILE)gcc
+host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 endif
 
 .SILENT: initramfs.cpio
@@ -40,6 +44,12 @@ ifeq (1,${INPUT_EVENTD})
 packages	+= install-initramfs/input-eventd.tgz
 clean		+= input-eventd_clean
 mrproper	+= input-eventd_mrproper
+endif
+
+ifeq (1,${KEXEC_TOOLS})
+packages	+= install-initramfs/kexec-tools.tgz
+clean		+= kexec-tools_clean
+mrproper	+= kexec-tools_mrproper
 endif
 
 install-initramfs/%.tgz:
