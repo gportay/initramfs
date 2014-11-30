@@ -38,6 +38,11 @@ initramfs.cpio: $(packages)
 	( cd $(tmpdir)/ramfs/ && find . | cpio -H newc -o >../$@ ) && cp $(tmpdir)/$@ .
 	rm -Rf $(tmpdir)
 
+%.dtb: $(LINUXDIR)/arch/$(arch)/boot/dts/%.dts
+	@echo -e "\e[1mBuilding $@ for $(ARCH)...\e[0m"
+	make -C $(LINUXDIR) $@
+	cp $(LINUXDIR)/arch/$(arch)/boot/dts/$@ .
+
 $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio
 	@echo -e "\e[1mBuilding $@ for $(ARCH)...\e[0m"
 	make -C $(LINUXDIR) ${@F} CONFIG_INITRAMFS_SOURCE=../$<
@@ -51,4 +56,4 @@ clean: $(clean)
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
 
 mrproper: clean $(mrproper)
-	rm -f *Image
+	rm -f *Image *.dtb
