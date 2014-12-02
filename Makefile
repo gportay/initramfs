@@ -2,6 +2,9 @@ TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
 export LDFLAGS ?= -static
+ifdef CROSS_COMPILE
+export CC = $(CROSS_COMPILE)gcc
+endif
 
 .SILENT: initramfs.cpio
 
@@ -31,6 +34,12 @@ packages	+= install-initramfs/busybox.tgz
 clean		+= busybox_clean
 mrproper	+= busybox_mrproper
 include busybox.inc
+endif
+
+ifeq (1,${INPUT_EVENTD})
+packages	+= install-initramfs/input-eventd.tgz
+clean		+= input-eventd_clean
+mrproper	+= input-eventd_mrproper
 endif
 
 install-initramfs/%.tgz:
