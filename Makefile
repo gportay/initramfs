@@ -8,7 +8,13 @@ export LDFLAGS ?= -static
 ifdef CROSS_COMPILE
 export CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
+arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
 endif
+
+LINUXDIR	?= linux
+IMAGE		?= zImage
+arch		?= $(shell uname -m)
+export ARCH = $(arch)
 
 .SILENT: initramfs.cpio
 
@@ -64,8 +70,16 @@ initramfs.cpio: $(packages)
 	( cd $(tmpdir)/ramfs/ && find . | cpio -H newc -o >../$@ ) && cp $(tmpdir)/$@ .
 	rm -Rf $(tmpdir)
 
+$(IMAGE): initramfs.cpio
+	@echo -e "\e[1mBuilding $@ for $(ARCH)...\e[0m"
+	make -C $(LINUXDIR) $@ CONFIG_INITRAMFS_SOURCE=$(PWD)/$<
+	cp $(LINUXDIR)/arch/$(arch)/boot/$@ $@
+
+kernel: $(IMAGE)
+
 clean:
 	rm -Rf initramfs.cpio
 
 mrproper: clean
+	rm -f *Image
 	rm -Rf install-initramfs/*
