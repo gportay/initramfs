@@ -1,3 +1,4 @@
 *~
 install-initramfs/
 packages-initramfs/busybox/
+packages-initramfs/input-event.d/

@@ -16,3 +16,9 @@ mrproper	+= busybox_mrproper
 include busybox.inc
 endif
 
+ifeq (1,${INPUT_EVENTD})
+packages	+= install-initramfs/input-eventd.tgz
+clean		+= input-eventd_clean
+mrproper	+= input-eventd_mrproper
+endif
+

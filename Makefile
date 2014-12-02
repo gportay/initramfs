@@ -2,6 +2,9 @@ TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
 export LDFLAGS ?= -static
+ifdef CROSS_COMPILE
+export CC = $(CROSS_COMPILE)gcc
+endif
 
 all: initramfs.cpio
 
