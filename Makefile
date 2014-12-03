@@ -1,13 +1,17 @@
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
-packages ?= install-initramfs/ramfs.tgz
-
 .SILENT: initramfs.cpio
 
 .PHONY: all initramfs.cpio clean
 
 all: initramfs.cpio
+
+packages	?= install-initramfs/ramfs.tgz
+
+ifneq (0,${PROFILE})
+packages	+= install-initramfs/profile.tgz
+endif
 
 install-initramfs/%.tgz:
 	@echo -e "\e[1mBuilding package $*...\e[0m"
