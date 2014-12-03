@@ -28,3 +28,7 @@ clean		+= kexec-tools_clean
 mrproper	+= kexec-tools_mrproper
 endif
 
+ifneq (0,${PROFILE})
+packages	+= install-initramfs/profile.tgz
+endif
+
