@@ -21,16 +21,48 @@ start)
 	fi
 
 	if [ -n "$IP" ]; then
-		interface=$IFACE ip=$IP broadcast=$BROADCAST subnet=$SUBNET /usr/share/udhcpc.action bound
-	else
-		/etc/init.d/ifplugd start $IFACE
+		echo -n "(static ip=$IP${BROADCAST:+ broadcast=$BROADCAST}${SUBNET:+ subnet=$SUBNET}) "
+		if interface=$IFACE ip=$IP broadcast=$BROADCAST subnet=$SUBNET /usr/share/udhcpc.action bound >/dev/null 2>&1; then
+			echo "done."
+			exit 0
+		else
+			echo "failed."
+			exit 1
+		fi
+	fi
+
+	echo -n "(dynamic) "
+	if /etc/init.d/ifplugd status $IFACE >/dev/null 2>&1; then
+		echo "already started."
+		exit 0
+	fi
+
+	if ! /etc/init.d/ifplugd start $IFACE >/dev/null 2>&1; then
+		echo "failed."
+		exit 1
 	fi
 	echo "done."
 	;;
 stop)
 	shift
 	echo -n "stopping $DESC: $NAME... "
-	/etc/init.d/ifplugd stop $IFACE
+	if ! ip -o link show up | grep -q $IFACE; then
+		echo "already stopped."
+		exit 0
+	fi
+
+	if [ -z "$IP" ]; then
+		if ! /etc/init.d/ifplugd status $IFACE >/dev/null 2>&1; then
+			echo "already stopped."
+			exit 0
+		fi
+
+		if ! /etc/init.d/ifplugd stop $IFACE >/dev/null 2>&1; then
+			echo "failed."
+			exit 1
+		fi
+	fi
+
 	ip link set dev $IFACE down
 	echo "done."
 	;;
