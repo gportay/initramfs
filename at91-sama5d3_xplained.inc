@@ -1,7 +1,7 @@
 include at91.inc
 
 extradir	+= install-at91-sama5d3_xplained
-packages	+= 
+packages	+= install-at91-sama5d3_xplained/led.tgz
 
 ifneq (0,${RC_LOCAL})
 ifneq (0,${NETWORKING})

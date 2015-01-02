@@ -1,0 +1,44 @@
+#!/bin/sh
+
+case $1 in
+device)
+	case $2 in
+	up)
+		echo timer >/sys/class/leds/d2/trigger
+		echo none  >/sys/class/leds/d3/trigger
+		echo 0     >/sys/class/leds/d3/brightness
+		;;
+	down)
+		echo none  >/sys/class/leds/d2/trigger
+		echo 0     >/sys/class/leds/d2/brightness
+		echo none  >/sys/class/leds/d3/trigger
+		echo 255   >/sys/class/leds/d3/brightness
+		;;
+	esac
+	;;
+dhcp)
+	case $2 in
+	renew|bound)
+		echo none  >/sys/class/leds/d2/trigger
+		echo 255   >/sys/class/leds/d2/brightness
+		echo none  >/sys/class/leds/d3/trigger
+		echo 0     >/sys/class/leds/d3/brightness
+		;;
+	leasefail)
+		echo timer >/sys/class/leds/d2/trigger
+		echo none  >/sys/class/leds/d3/trigger
+		echo 0     >/sys/class/leds/d3/brightness
+		;;
+	esac
+	;;
+zeroconf)
+	case $2 in
+	link-local)
+		echo none  >/sys/class/leds/d2/trigger
+		echo 255   >/sys/class/leds/d2/brightness
+		echo none  >/sys/class/leds/d3/trigger
+		echo 0     >/sys/class/leds/d3/brightness
+		;;
+	esac
+	;;
+esac
