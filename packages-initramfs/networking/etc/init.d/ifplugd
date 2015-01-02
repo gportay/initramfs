@@ -4,7 +4,7 @@ IFACE=${2:-eth0}
 SCRIPT=${3:-/usr/share/${0##*/}.action}
 export NAME="interface $IFACE"
 export DESC="Link detection service"
-export ARGS="-n -s -I -i $IFACE -f -l -r $SCRIPT"
+export ARGS="-n -s -I -i $IFACE -f -l -t 0 -r $SCRIPT"
 export PIDFILE="/var/run/${0##*/}-$IFACE.pid"
 export HELP="[IFACE=eth0] [SCRIPT=/usr/share/${0##*/}.action]"
 /usr/share/init.d/${0##*/} $*
