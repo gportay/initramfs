@@ -38,9 +38,9 @@ restart|reload)
 status|wait)
 	shift
 	pid=$(cat $PIDFILE 2>/dev/null || echo)
-	if [ -z "$pid" ] || (
-	   	[ "$(readlink /proc/$pid/exe)" != $DAEMON ] ||
-	   	[ "$(cat /proc/$pid/comm 2>/dev/null)" != ${DAEMON##*/} ] ); then
+	if [ -z "$pid" ] || \
+	   [ "$(readlink /proc/$pid/exe)" != $DAEMON -a \
+	     "$(cat /proc/$pid/comm 2>/dev/null)" != ${DAEMON##*/} ]; then
 		exit 1
 	fi
 	if [ "$1" = wait ]; then
