@@ -17,6 +17,7 @@ start)
 		ethmac=$(echo $ETHMAC | sed -e 's,-,:,g')
 		[ -n "$ethmac" ] && ip link set addr $ethmac dev $IFACE
 		ip link set dev $IFACE up
+		unset ethmac
 	fi
 
 	if [ -n "$IP" ]; then
