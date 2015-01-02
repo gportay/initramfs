@@ -14,6 +14,7 @@ start)
 	if ! start-stop-daemon --start --pidfile $PIDFILE --make-pidfile \
 		--background --chuid $DAEMONUSER --exec $DAEMON -- $ARGS ; then
 		echo "failed."
+		exit 1
 	fi
 	echo "done."
 	;;
@@ -22,6 +23,7 @@ stop)
 	echo -n "stopping $DESC: $NAME... "
 	if ! start-stop-daemon --stop --pidfile $PIDFILE >/dev/null; then
 		echo "already stopped!"
+		exit 0
 	fi
 	rm -f $PIDFILE
 	echo "done."
