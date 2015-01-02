@@ -1,0 +1,19 @@
+#!/bin/sh
+
+script=$(readlink $0 || echo $0)
+script=${script##*/}
+scriptargs=${script#*:}
+oldifs=$IFS
+IFS=:
+for arg in $scriptargs; do
+	if echo $arg | grep -qE '[A-Za-z0-9*_-]+='; then
+		export $arg
+	else
+		args="$args $arg"
+	fi
+done
+IFS=$oldifs
+unset oldifs
+
+script=${script%%:*}
+/etc/init.d/$script $* $args

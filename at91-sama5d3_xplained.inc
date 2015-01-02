@@ -3,6 +3,12 @@ include at91.inc
 extradir	+= install-at91-sama5d3_xplained
 packages	+= 
 
+ifneq (0,${RC_LOCAL})
+ifneq (0,${NETWORKING})
+packages	+= install-at91-sama5d3_xplained/networking.tgz
+endif
+endif
+
 install-at91-sama5d3_xplained/%.tgz:
 	@echo -e "\e[1mBuilding package $*...\e[0m"
 	install -d ${@D}
