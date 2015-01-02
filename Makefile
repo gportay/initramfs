@@ -35,6 +35,7 @@ initramfs.cpio: $(packages)
 	@for pkg in $(packages); do echo " - $${pkg##*/}"; done
 	install -d $(tmpdir)/ramfs
 	for dir in install-initramfs $(extradir); do find $$dir/ -name "*.tgz" -exec tar xzf {} -C $(tmpdir)/ramfs \;; done
+	if ! test -e $(tmpdir)/ramfs/init; then ln -sf etc/init $(tmpdir)/ramfs/init; fi
 	( cd $(tmpdir)/ramfs/ && find . | cpio -H newc -o >../$@ ) && cp $(tmpdir)/$@ .
 	rm -Rf $(tmpdir)
 
