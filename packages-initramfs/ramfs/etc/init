@@ -26,10 +26,7 @@ EOF
 }
 
 . /etc/init.d/mount-linuxfs
-
-# Populate device mount point
-echo /sbin/mdev >/proc/sys/kernel/hotplug
-mdev -s
+. /etc/init.d/mdev
 
 # Ensure tmp is RAM
 grep -Eq '/tmp '     /proc/mounts || mount /tmp     || mount -t tmpfs    none /tmp
