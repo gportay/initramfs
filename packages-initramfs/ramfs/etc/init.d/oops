@@ -1,17 +1,12 @@
 #!/bin/sh
 
-# Execute a getty on exit and respawn
+# Execute a sulogin on exit and respawn
 oops() {
 	[ $? -eq 0 ] && return
 
-	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
-	[ -n "$console" ] || die "Oops, init is about to exit!"
-
-	tty=$(echo "$console" | cut -d, -f1)
-	baudrate=$(echo "$console" | cut -d, -f2)
 	while true; do
-		/sbin/getty $tty ${baudrate:-115200} || err=$?
-		echo "/sbin/getty: exited with ${err:-0}! respawning..." >&2
+		/sbin/sulogin || err=$?
+		echo "/sbin/sulogin: exited with ${err:-0}! respawning..." >&2
 		unset err
 		sleep 1
 	done
