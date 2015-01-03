@@ -75,4 +75,5 @@ single)    exec /sbin/sulogin;;
 *)         [ -x /etc/rc.local ] && exec /etc/rc.local $runlevel;;
 esac
 
+echo "Oops... ${0##*/} is about to exit!" >&2
 exit 1
