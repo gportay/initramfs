@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Ensure tmp is RAM
+grep -Eq '/tmp '     /proc/mounts || mount /tmp     || mount -t tmpfs    none /tmp
