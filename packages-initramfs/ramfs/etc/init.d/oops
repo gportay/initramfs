@@ -2,7 +2,7 @@
 
 # Execute a sulogin on exit and respawn
 oops() {
-	[ $? -eq 0 ] && return
+	[ $? -eq 0 -a $$ -ne 1 ] && return
 
 	while true; do
 		/sbin/sulogin || err=$?
