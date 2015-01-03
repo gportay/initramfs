@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Mount the Linux kernel virtual filesystems
+[ -d '/proc/1' ]                  || mount /proc    || mount -t proc     none /proc
+grep -Eq '/sys '     /proc/mounts || mount /sys     || mount -t sysfs    none /sys
+
+# Ensure devtmpfs is mounted, it must be done manually with initramfs
+grep -Eq '/dev '     /proc/mounts || mount /dev     || mount -t tmpfs    none /dev
+
+# Setup PTY infrastructure
+mkdir -p /dev/pts
+grep -Eq '/dev/pts ' /proc/mounts || mount /dev/pts || mount -t devpts   none /dev/pts
