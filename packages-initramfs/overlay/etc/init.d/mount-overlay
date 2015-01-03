@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+mountdir=${MOUNTDIR:-/media/root-overlay}
+persistantdir=${PERSISTANTDIR:-/media/persistant}
+lowerdir=/
+upperdir=$persistantdir/root	
+workdir=$persistantdir/.work
+
+echo "Installing overlay..."
+for d in $upperdir $workdir; do
+	[ -d $d ] || mkdir -p $d 
+done
+
+echo "Mounting overlay directory to $mountdir..."
+mount -olowerdir=$lowerdir,upperdir=$upperdir,workdir=$workdir -t overlay overlay $mountdir $MOUNTOPTS

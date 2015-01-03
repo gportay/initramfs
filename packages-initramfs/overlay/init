@@ -1,0 +1,77 @@
+#!/bin/sh -e
+
+VERSION=0.1
+
+die() {
+	echo "Error: $*" >&2
+	exit 1
+}
+
+usage() {
+	cat <<EOF
+Usage: ${0##*/} [OPTIONS] [RUNLEVEL]
+
+Options:
+ -D or --debug          Turn on debug mode.
+ -q or --quiet          Turn off verbosity.
+ -v or --verbose        Turn on verbosity.
+ -h or --help           Display this message.
+ -V or --version        Display the version.
+EOF
+}
+
+. /etc/init.d/mount-linuxfs
+. /etc/init.d/mdev
+. /etc/init.d/console
+. /etc/init.d/oops
+
+initargs="$*"
+while [ $# -ne 0 ]; do
+	if [ "$1" = -h ] || [ "$1" = --help ]; then
+		usage
+		exit 0
+	elif [ "$1" = "-V" ] || [ "$1" = "--version" ] ; then
+		echo $VERSION
+		exit 0
+	elif [ "$1" = "-c" ] || [ "$1" = "--console" ] ; then
+		shift
+		console=$1
+	elif [ "$1" = -D ] || [ "$1" = debug ]; then
+		export DEBUG=1
+	elif [ "$1" = -v ] || [ "$1" = verbose ]; then
+		export VERBOSE=1
+	elif [ "$1" = -q ] || [ "$1" = quiet ]; then
+		export QUIET=1
+	elif echo "$1" | grep -qE "^[a-zA-Z0-9_]+="; then
+		var=$(echo $1 | cut -d= -f1)
+		val=$(echo $1 | cut -d= -f2)
+		export $var=$val
+	else
+		usage
+		die "Too many arguments!"
+	fi
+	shift
+done
+
+persistantdir=/media/persistant
+echo "Mounting persistant directory to $persistantdir..."
+/etc/init.d/mount-persistant start
+
+chrootdir=/media/root-overlay
+echo "Mounting overlay directory to $chrootdir..."
+/etc/init.d/mount-overlay start
+
+for init in /sbin/init /etc/init /bin/init /bin/sh; do
+	[ -e $chrootdir/$init ] && break
+done
+
+echo "Installing chroot to $chrootdir..."
+for dir in /dev /sys /proc; do
+	mount -o bind $dir $chrootdir$dir
+done
+
+echo "Chrooting to $chrootdir..."
+chroot=$chrootdir exec chroot $chrootdir $init $initargs
+
+echo "Oops... ${0##*/} is about to exit!" >&2
+exit 1
