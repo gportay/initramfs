@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Execute a getty in case of emergency
+oops() {
+	[ $? -eq 0 ] && return
+
+	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
+	[ -n "$console" ] || die "Oops, init is about to exit!"
+
+	tty=$(echo "$console" | cut -d, -f1)
+	baudrate=$(echo "$console" | cut -d, -f2)
+	while /sbin/getty $tty ${baudrate:-115200}; do
+		echo "Getty exited with \$?! respawning..."
+		sleep 1
+	done
+}
+trap oops 0

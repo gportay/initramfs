@@ -28,22 +28,7 @@ EOF
 . /etc/init.d/mount-linuxfs
 . /etc/init.d/mdev
 . /etc/init.d/mount-tmp
-
-# Execute a getty in case of emergency
-oops() {
-	[ $? -eq 0 ] && return
-
-	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
-	[ -n "$console" ] || die "Oops, init is about to exit!"
-
-	tty=$(echo "$console" | cut -d, -f1)
-	baudrate=$(echo "$console" | cut -d, -f2)
-	while /sbin/getty $tty ${baudrate:-115200}; do
-		echo "Getty exited with \$?! respawning..."
-		sleep 1
-	done
-}
-trap oops 0
+. /etc/init.d/oops
 
 while [ $# -ne 0 ]; do
 	if [ "$1" = -h ] || [ "$1" = --help ]; then
