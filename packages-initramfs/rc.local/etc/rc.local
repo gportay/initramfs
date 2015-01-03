@@ -1,21 +1,6 @@
 #!/bin/sh -e
 
-respawn_login() {
-	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
-	if [ -n "$console" ]; then
-		tty=$(echo "$console" | cut -d, -f1)
-		baudrate=$(echo "$console" | cut -d, -f2)
-		login="/sbin/getty $tty ${baudrate:-115200}"
-	else
-		login=/sbin/sulogin
-	fi
-
-	while $login; do
-		echo "Login exited with \$?! respawning..."
-		sleep 1
-	done
-}
-trap respawn_login 0
+. /etc/init.d/oops
 
 cat /proc/device-tree/compatible | cut -d, -f2 | \
 while read machine; do run-parts --arg start --exit-on-error /usr/share/rc.local/$machine.d || break; done
