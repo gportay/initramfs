@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-VERSION=0.1
+VERSION=0.2
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin
 export ETHMAC=$(cat /etc/security/ethmac 2>/dev/null || echo "F8:81:1A:00:00:00")
 
