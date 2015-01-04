@@ -1,12 +1,14 @@
 #!/bin/sh
 
-# Execute a sulogin on exit and respawn
+login="${LOGIN:-/bin/login -p}"
+
+# Execute a login on exit and respawn
 oops() {
 	[ $? -eq 0 -a $$ -ne 1 ] && return
 
 	while true; do
-		/sbin/sulogin || err=$?
-		echo "/sbin/sulogin: exited with ${err:-0}! respawning..." >&2
+		$login || err=$?
+		echo "${login%% *}: exited with ${err:-0}! respawning..." >&2
 		unset err
 		sleep 1
 	done
