@@ -37,6 +37,8 @@ include $(PACKAGES)
 
 .PHONY:: all clean
 
+.PRECIOUS::
+
 install-initramfs/%.tgz:
 	@echo -e "\e[1mBuilding package $*...\e[0m"
 	( cd packages-initramfs/$* && tar czf ../../$@ --exclude=.gitignore * )

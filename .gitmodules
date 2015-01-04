@@ -7,3 +7,6 @@
 [submodule "linux"]
 	path = linux
 	url = git@github.com:gazoo74/linux.git
+[submodule "kconfig-frontends"]
+	path = kconfig-frontends
+	url = git://ymorin.is-a-geek.org/kconfig-frontends
