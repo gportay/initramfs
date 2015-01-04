@@ -3,7 +3,7 @@
 . /etc/init.d/oops
 
 cat /proc/device-tree/compatible | cut -d, -f2 | \
-while read machine; do run-parts --arg start --exit-on-error /usr/share/rc.local/$machine.d || break; done
+while read machine; do run-parts --arg start --exit-on-error /usr/share/rc.local/$machine.d && break; done
 
 export TMPDIR=/tmp
 
