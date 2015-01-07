@@ -1,3 +1,9 @@
+VERSION		 = 0
+PATCHLEVEL	 = 0
+SUBLEVEL	 = 0
+EXTRAVERSION	 = .0
+NAME		 = I am Charlie
+
 PREFIX ?= /usr
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
