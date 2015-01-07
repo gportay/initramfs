@@ -4,6 +4,8 @@ SUBLEVEL	 = 0
 EXTRAVERSION	 = .0
 NAME		 = I am Charlie
 
+include dir.mk
+
 PREFIX ?= /usr
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
