@@ -49,3 +49,29 @@ cleanall::
 
 mrproper::
 	rm -f $(KCONFIG_CONFIG)
+
+debug::
+	@echo ">>> $(SELFDIR).$@:"
+	@echo "  - SELFDIR=$(SELFDIR)"
+	@echo "  - word=$(word)"
+	@echo "  - words=$(words)"
+	@echo "  - lastword=$(lastword)"
+	@echo "  - 0=$(0)"
+	@echo "  - 1=$(1)"
+	@echo "  - KBUILD_SRC=$(KBUILD_SRC)"
+	@echo "  - CURDIR=$(CURDIR)"
+	@echo "  - srctree=$(srctree)"
+	@echo "  - TOPDIR=$(TOPDIR)"
+	@echo "  - objtree=$(objtree)"
+	@echo "  - src=$(src)"
+	@echo "  - objtree=$(objtree)"
+	@echo "  - obj=$(obj)"
+	@echo "  - CONFIG_CROSS_COMPILER_PREFIX=$(CONFIG_CROSS_COMPILER_PREFIX)"
+	@echo "  - CONFIG_BUSYBOX=$(CONFIG_BUSYBOX)"
+	@echo "  - CONFIG_NETWORKING=$(CONFIG_NETWORKING)"
+	@echo "  - CONFIG_RC_LOCAL=$(CONFIG_RC_LOCAL)"
+	@echo "  - CONFIG_PROFILE=$(CONFIG_PROFILE)"
+	@echo "  - CONFIG_OVERLAY_FS=$(CONFIG_OVERLAY_FS)"
+	@echo "  - CONFIG_KEXEC_TOOLS=$(CONFIG_KEXEC_TOOLS)"
+	@echo "  - CONFIG_INPUT_EVENTD=$(CONFIG_INPUT_EVENTD)"
+	@echo "<<< $@"
