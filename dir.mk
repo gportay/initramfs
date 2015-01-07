@@ -1,0 +1,24 @@
+prefix		?= /usr/local
+exec_prefix	?= $(prefix)
+bindir		?= $(exec_prefix)/bin
+sbindir		?= $(exec_prefix)/sbin
+libexecdir	?= $(exec_prefix)/libexec
+datarootdir	?= $(prefix)/share
+datadir		?= $(prefix)/bin
+sysconfdir	?= $(prefix)/etc
+sharedstatedir	?= $(prefix)/com
+localstatedir	?= $(prefix)/var
+runstatedir	?= $(localstatedir)/run
+includedir	?= $(prefix)/include
+oldincludedir	?= /usr/include
+docdir		?= $(datarootdir)/doc
+infodir		?= $(docdir)
+htmldir		?= $(docdir)
+dvidir		?= $(docdir)
+pdfdir		?= $(docdir)
+psdir		?= $(docdir)
+libdir		?= $(exec_prefix)/lib
+lispdir		?= $(datarootdir)/emacs/site-lisp
+localedir	?= $(datarootdir)/locale
+mandir		?= $(datarootdir)/man
+
