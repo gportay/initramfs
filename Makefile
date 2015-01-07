@@ -4,6 +4,8 @@ SUBLEVEL	 = 0
 EXTRAVERSION	 = .0
 NAME		 = I am Charlie
 
+SELFDIR := $(dir $(lastword $(MAKEFILE_LIST)))
+
 include dir.mk
 include autotools.mk
 include kconfig.mk
@@ -140,3 +142,55 @@ reallyclean:: clean
 
 mrproper:: reallyclean
 	rm -f *Image *.dtb
+
+debug-dir/%.tgz:
+	@echo " @=$@"
+	@echo "@D=${@D}"
+	@echo "@F=${@F}"
+	@echo " *=$*"
+	@echo "*D=${*D}"
+	@echo "*F=${*F}"
+	@echo " %=$%"
+	@echo "%D=${%D}"
+	@echo "%F=${%F}"
+	@echo " <=$<"
+	@echo "<D=${<D}"
+	@echo "<F=${<F}"
+	@echo " ^=$^"
+	@echo "^D=${^D}"
+	@echo "^F=${^F}"
+	@echo " +=$+"
+	@echo "+D=${+D}"
+	@echo "+F=${+F}"
+	@echo " ?=$?"
+	@echo "?D=${?D}"
+	@echo "?F=${?F}"
+
+debug::
+	@echo ">>> $(SELFDIR).$@:"
+	@echo "  - MAKEFILE_LIST=$(MAKEFILE_LIST)"
+	@echo "  - SELFDIR=$(SELFDIR)"
+	@echo "  - CURDIR=$(CURDIR)"
+	@echo "  - BUILD_CC=$(BUILD_CC)"
+	@echo "  - CC=$(CC)"
+	@echo "  - CXX=$(CXX)"
+	@echo "  - AR=$(AR)"
+	@echo "  - RANLIB=$(RANLIB)"
+	@echo "  - AS=$(AS)"
+	@echo "  - CC=$(CC)"
+	@echo "  - LD=$(LD)"
+	@echo "  - CPP=$(CPP)"
+	@echo "  - AR=$(AR)"
+	@echo "  - NM=$(NM)"
+	@echo "  - STRIP=$(STRIP)"
+	@echo "  - OBJCOPY=$(OBJCOPY)"
+	@echo "  - OBJDUMP=$(OBJDUMP)"
+	@echo "  - PKG_CONFIG=$(PKG_CONFIG)"
+	@echo "  - ARCH=$(ARCH)"
+	@echo "  - SUBARCH=$(SUBARCH)"
+	@echo "  - build=$(build)"
+	@echo "  - host=$(host)"
+	@echo "  - target=$(target)"
+	@echo "  - arch=$(arch)"
+	@echo "  - sysroot=$(sysroot)"
+	@echo "<<< $(SELFDIR).$@"
