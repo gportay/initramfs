@@ -11,8 +11,6 @@ endif
 
 ifeq (y,$(CONFIG_BUSYBOX))
 packages	+= install-initramfs/busybox.tgz
-clean		+= busybox_clean
-mrproper	+= busybox_mrproper
 include busybox.inc
 endif
 
