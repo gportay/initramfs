@@ -20,8 +20,15 @@ busybox_%::
 	make -C busybox $*
 
 busybox_clean:
+	-make -C busybox clean
 	rm -f install-initramfs/busybox.tgz
 
-busybox_mrproper: busybox_clean
-	make -C busybox mrproper
+busybox_cleanall:
+	-make -C busybox mrproper
 	rm -Rf packages-initramfs/busybox/*
+
+clean::
+	-make -f Makefile busybox_clean
+
+mrpoper::
+	-make -f Makefile busybox_cleanall
