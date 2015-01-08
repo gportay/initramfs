@@ -8,6 +8,7 @@ all::
 
 include dir.mk
 include autotools.mk
+include kconfig.mk
 
 PREFIX ?= /usr
 TMPDIR ?= /tmp

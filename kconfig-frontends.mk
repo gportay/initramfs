@@ -9,6 +9,15 @@ kconfig-frontends_%:
 
 kconfig-frontends:: kconfig-frontends_all
 
+kconfig-frontends_configure::
+	make -f Makefile kconfig-frontends/Makefile
+
+kconfig-frontends_install:: kconfig-frontends/Makefile
+	make -C kconfig-frontends install
+
+kconfig-frontends_uninstall:: kconfig-frontends/Makefile
+	make -C kconfig-frontends uninstall
+
 kconfig-frontends_cleanall::
 	-make -f Makefile kconfig-frontends_clean
 

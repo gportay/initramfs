@@ -3,13 +3,13 @@ include at91.inc
 extradir	+= install-at91-sama5d3_xplained
 packages	+= install-at91-sama5d3_xplained/led.tgz
 
-ifneq (0,${RC_LOCAL})
-ifneq (0,${NETWORKING})
+ifeq (y,$(CONFIG_RC_LOCAL))
+ifeq (y,$(CONFIG_NETWORKING))
 packages	+= install-at91-sama5d3_xplained/networking.tgz
 endif
 endif
 
-ifneq (0,${OVERLAY})
+ifeq (y,$(CONFIG_OVERLAY_FS))
 packages	+= install-at91/persistant.tgz install-initramfs/overlay.tgz
 endif
 
