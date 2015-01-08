@@ -1,3 +1,6 @@
+image			?= $(CONFIG_IMAGE)
+IMAGE			?= $(if $(image),$(image),zImage)
+
 %.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."
 	make -C linux $@
@@ -23,5 +26,5 @@ kernel: $(IMAGE)
 clean::
 	rm -f $(IMAGE)
 
-mrproper::
+reallyclean::
 	rm -f *Image *.dtb
