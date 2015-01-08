@@ -4,7 +4,10 @@ SUBLEVEL	 = 0
 EXTRAVERSION	 = .0
 NAME		 = I am Charlie
 
+all::
+
 include dir.mk
+include autotools.mk
 
 PREFIX ?= /usr
 TMPDIR ?= /tmp
