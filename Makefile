@@ -6,6 +6,7 @@ NAME		 = I am Charlie
 
 include dir.mk
 include autotools.mk
+include kconfig.mk
 
 PREFIX ?= /usr
 TMPDIR ?= /tmp
