@@ -1,0 +1,99 @@
+#
+# For a description of the syntax of this configuration file,
+# see ./share/doc/kconfig-frontends/kconfig-language.txt.
+#
+mainmenu "InitRAMFS Configuration"
+
+config BUSYBOX
+	bool "Busybox - The Swiss Army Knife of Embedded Linux"
+	default y
+	help
+	  BusyBox combines tiny versions of many common UNIX utilities into a
+	  single small executable. It provides replacements for most of the
+	  utilities you usually find in GNU fileutils, shellutils, etc.
+	  The utilities in BusyBox generally have fewer options than their
+	  full-featured GNU cousins; however, the options that are included
+	  provide the expected functionality and behave very much like their
+	  GNU counterparts. BusyBox provides a fairly complete environment for
+	  any small or embedded system.
+
+	  BusyBox has been written with size-optimization and limited resources
+	  in mind. It is also extremely modular so you can easily include or
+	  exclude commands (or features) at compile time. This makes it easy to
+	  customize your embedded systems. To create a working system, just add
+	  some device nodes in /dev, a few configuration files in /etc, and a
+	  Linux kernel.
+
+	  BusyBox is maintained by Denys Vlasenko, and licensed under the GNU
+	  GENERAL PUBLIC LICENSE version 2.
+
+config NETWORKING
+	bool "Networking - home-made scripts"
+	default y
+	help
+	  This option allows InitRAMFS to have support for networking script.
+	  Combined to rc.local, it will setup network at start-up.
+	  $ /etc/init.d/networking start [IFACE=eth0]
+
+config INET
+	bool "inet - Internet Superserver"
+	default y
+	depends on NETWORKING
+	help
+	  Internet superserver daemon
+
+config RC_LOCAL
+	bool "rc.local - customize scripts at startup"
+	default y
+	help
+	  The rc.local script is a script runned by the tiny init script after
+
+config PROFILE
+	bool "Enable .profile"
+	default y
+	help
+	  Enable options and features which are not essential.
+	  Select this only if you plan to use busybox on full-blown
+	  desktop machine with common Linux distro, not on an embedded box.
+
+config OVERLAY_FS
+	bool "Overlay FS support"
+	default n
+	help
+	  An overlay filesystem combines two filesystems - an 'upper' filesystem
+	  and a 'lower' filesystem.  When a name exists in both filesystems, the
+	  object in the 'upper' filesystem is visible while the object in the
+	  'lower' filesystem is either hidden or, in the case of directories,
+	  merged with the 'upper' object.
+
+	  For more information see Documentation/filesystems/overlayfs.txt
+
+config OVERLAID_CHROOT
+	bool "Enable Overlaid chroot"
+	depends on OVERLAY_FS
+	default n
+	help
+
+config KEXEC_TOOLS
+	bool "kexec-tools"
+	default n
+	help
+	  kexec is a system call that enables you to load and boot into another
+	  kernel from the currently running kernel. kexec performs the function
+	  of the boot loader from within the kernel.
+	  The primary difference between a standard system boot and a kexec
+	  boot is that the hardware initialization normally performed by the
+	  BIOS or firmware (depending on architecture) is not performed during
+	  a kexec boot. This has the effect of reducing the time required for a
+	  reboot.
+
+	  Make sure you have selected CONFIG_KEXEC=y when configuring the
+	  kernel. The CONFIG_KEXEC option enables the kexec system call.
+
+config INPUT_EVENTD
+	bool "input-eventd - "
+	default y
+	help
+	  Enable options and features which are not essential.
+	  Select this only if you plan to use busybox on full-blown
+	  desktop machine with common Linux distro, not on an embedded box.
