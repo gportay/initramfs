@@ -19,6 +19,9 @@ packages-initramfs/kexec-tools: kexec-tools/build/sbin/kexec
 
 install-initramfs/kexec-tools.tgz: packages-initramfs/kexec-tools
 
+kexec-tools_%::
+	make -C kexec-tools $*
+
 kexec-tools_clean:
 	rm -f install-initramfs/kexec-tools.tgz
 
