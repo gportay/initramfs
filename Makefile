@@ -7,6 +7,7 @@ RELEASE		 = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLE
 
 all::
 
+include kconfig.mk
 include dir.mk
 include autotools.mk
 
@@ -17,6 +18,7 @@ tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 prefix := $(PREFIX)
 
 export LDFLAGS ?= -static
+CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 ifdef CROSS_COMPILE
 CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
@@ -28,9 +30,8 @@ export ARCH = $(arch)
 
 all:: initramfs.cpio
 
-packages ?= install-initramfs/ramfs.tgz
-PACKAGES += initramfs.mk
-include $(PACKAGES)
+tgz-y		?= install-initramfs/ramfs.tgz
+include initramfs.mk
 
 .SILENT:: initramfs.cpio version help
 
@@ -60,8 +61,8 @@ install-initramfs/%.tgz:
 	@echo "Building package $*..."
 	( cd packages-initramfs/$* && tar czf ../../$@ --exclude=.gitignore * )
 
-$(tmpdir)/ramfs: $(packages)
-	@for pkg in $(packages); do echo " - $${pkg##*/}"; done
+$(tmpdir)/ramfs: $(tgz-y)
+	@for tgz in $(tgz-y); do echo " - $${tgz##*/}"; done
 	install -d $@
 	for dir in install-initramfs $(extradir); do find $$dir/ -name "*.tgz" -exec tar xzf {} -C $@ \;; done
 
