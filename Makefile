@@ -5,6 +5,7 @@ EXTRAVERSION	 = .0
 NAME		 = I am Charlie
 
 include dir.mk
+include autotools.mk
 
 PREFIX ?= /usr
 TMPDIR ?= /tmp
