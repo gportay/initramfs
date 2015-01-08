@@ -22,15 +22,15 @@ IMAGE		?= zImage
 arch		?= $(shell uname -m)
 export ARCH = $(arch)
 
-all: initramfs.cpio
+all:: initramfs.cpio
 
 packages ?= install-initramfs/ramfs.tgz
 PACKAGES += initramfs.inc
 include $(PACKAGES)
 
-.SILENT: initramfs.cpio
+.SILENT:: initramfs.cpio
 
-.PHONY: all clean
+.PHONY:: all clean
 
 install-initramfs/%.tgz:
 	@echo -e "\e[1mBuilding package $*...\e[0m"
@@ -60,8 +60,8 @@ $(IMAGE): $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE)
 
 kernel: $(IMAGE)
 
-clean: $(clean)
+clean:: $(clean)
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
 
-mrproper: clean $(mrproper)
+mrproper:: clean $(mrproper)
 	rm -f *Image *.dtb
