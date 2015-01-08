@@ -15,6 +15,9 @@ packages-initramfs/busybox/bin/busybox: busybox/busybox
 
 install-initramfs/busybox.tgz: packages-initramfs/busybox/bin/busybox
 
+busybox_%::
+	make -C busybox $*
+
 busybox_clean:
 	-make -C busybox clean
 	rm -f install-initramfs/busybox.tgz
