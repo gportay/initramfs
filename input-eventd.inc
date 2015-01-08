@@ -15,6 +15,10 @@ install-initramfs/input-eventd.tgz: packages-initramfs/input-eventd
 input-eventd_clean:
 	rm -f install-initramfs/input-eventd.tgz
 
-input-eventd_mrproper: input-eventd_clean
+input-eventd_cleanall: input-eventd_clean
 	rm -f input-eventd/*.o input-eventd/input-eventd
 	rm -Rf packages-initramfs/input-eventd/*
+
+clean:: input-eventd_clean
+
+mrproper:: input-eventd_cleanall
