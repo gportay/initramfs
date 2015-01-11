@@ -18,6 +18,7 @@ ifeq (y,$(CONFIG_INPUT_EVENTD))
 packages	+= install-initramfs/input-eventd.tgz
 clean		+= input-eventd_clean
 mrproper	+= input-eventd_mrproper
+include input-eventd.inc
 endif
 
 ifeq (y,$(CONFIG_KEXEC_TOOLS))
