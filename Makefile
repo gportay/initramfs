@@ -102,7 +102,7 @@ include $(PACKAGES)
 
 .SILENT:: initramfs.cpio
 
-.PHONY:: all clean
+.PHONY:: all clean kernel-headers
 
 .PRECIOUS::
 
@@ -140,6 +140,9 @@ $(IMAGE): $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE)
 	cp $(LINUXDIR)/arch/$(arch)/boot/$@ $@
 
 kernel: $(IMAGE)
+
+kernel-headers:
+	make -C $@ install prefix=$(prefix) DESTDIR=$(PWD)/sysroot
 
 clean::
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
