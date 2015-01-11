@@ -144,6 +144,12 @@ kernel: $(IMAGE)
 kernel-headers:
 	make -C $@ install prefix=$(prefix) DESTDIR=$(PWD)/sysroot
 
+libc:
+	mkdir -p eglibc/$(CROSS_COMPILE)libc
+	cd eglibc/$(CROSS_COMPILE)libc && ../libc/configure --prefix=/usr --with-headers=$(sysroot)/usr/include --build=$(build) --host=$(host) --disable-profile --without-gd --without-cvs --enable-add-ons
+	make
+	echo make install install_root=$sysroot
+
 clean::
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
 
