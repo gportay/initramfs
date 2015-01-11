@@ -51,6 +51,9 @@ initramfs.cpio: $(packages)
 	make -C $(LINUXDIR) $@
 	cp $(LINUXDIR)/arch/$(arch)/boot/dts/$@ .
 
+$(LINUXDIR)_%s:
+	make -C $(LINUXDIR) $*
+
 $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio
 	@echo -e "\e[1mBuilding $@ for $(ARCH)...\e[0m"
 	make -C $(LINUXDIR) ${@F} CONFIG_INITRAMFS_SOURCE=../$<
