@@ -28,6 +28,6 @@ kexec-tools_cleanall:: kexec-tools_clean
 	-make -C kexec-tools distclean
 	rm -Rf packages-initramfs/kexec-tools/*
 
-clean:: kexec-tools_clean
+reallyclean:: kexec-tools_clean
 
 mrproper:: kexec-tools_cleanall
