@@ -10,6 +10,11 @@ include dir.mk
 include autotools.mk
 include kconfig.mk
 
+srctree		:= $(if $(KBUILD_SRC),$(KBUILD_SRC),$(CURDIR))
+objtree		:= $(CURDIR)
+src		:= $(srctree)
+obj		:= $(objtree)
+
 PREFIX ?= /usr
 TMPDIR ?= /tmp
 tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
