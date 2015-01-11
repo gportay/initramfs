@@ -48,6 +48,12 @@ config NETWORKING
 	  Combined to rc.local, it will setup network at start-up.
 	  $ /etc/init.d/networking start [IFACE=eth0]
 
+config INETD
+	bool "inet - Internet Super-Server daemon"
+	default y
+	depends on NETWORKING
+	help
+
 config RC_LOCAL
 	bool "rc.local - customize scripts at startup"
 	default y
