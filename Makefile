@@ -11,6 +11,8 @@ include autotools.mk
 include kconfig.mk
 
 srctree		:= $(if $(KBUILD_SRC),$(KBUILD_SRC),$(CURDIR))
+TOPDIR		:= $(srctree)
+# FIXME - TOPDIR is obsolete, use srctree/objtree
 objtree		:= $(CURDIR)
 src		:= $(srctree)
 obj		:= $(objtree)
