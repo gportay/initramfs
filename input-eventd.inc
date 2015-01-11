@@ -24,7 +24,7 @@ input-eventd_cleanall: input-eventd_clean
 	rm -f input-eventd/*.o input-eventd/input-eventd
 	rm -Rf packages-initramfs/input-eventd/*
 
-clean::
+reallyclean::
 	-make -f Makefile input-eventd_clean
 
 mrproper::
