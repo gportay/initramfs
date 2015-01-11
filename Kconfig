@@ -117,3 +117,19 @@ config INPUT_EVENTD
 	  Enable options and features which are not essential.
 	  Select this only if you plan to use busybox on full-blown
 	  desktop machine with common Linux distro, not on an embedded box.
+
+menu "Linux"
+
+config LINUXDIR
+	string "Path to Linux Kernel Sources"
+	default "linux"
+	help
+	  The path to the Linux Kernel sources.
+
+config LINUX_DEFCONFIG
+	string "Path to Linux Kernel defconfig"
+	default "linux_defconfig"
+	help
+	  The path to the Linux Kernel defconfig.
+
+endmenu
