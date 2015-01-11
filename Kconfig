@@ -2,7 +2,7 @@
 # For a description of the syntax of this configuration file,
 # see ./share/doc/kconfig-frontends/kconfig-language.txt.
 #
-mainmenu "InitRAMFS Configuration"
+mainmenu "InitRAMFS $INITRAMFSVERSION Configuration"
 
 config BUSYBOX
 	bool "Busybox - The Swiss Army Knife of Embedded Linux"

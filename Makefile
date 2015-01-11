@@ -4,14 +4,29 @@ SUBLEVEL	 = 0
 EXTRAVERSION	 = .0
 NAME		 = I am Charlie
 
+INITRAMFSVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
 SELFDIR := $(dir $(lastword $(MAKEFILE_LIST)))
 
+export INITRAMFSVERSION
+
 all::
+	@echo $(INITRAMFSVERSION)
 
 include dir.mk
 include autotools.mk
 include kconfig.mk
 
+###ifeq ($(KBUILD_SRC),)
+###        # building in the source tree
+###        srctree := .
+###else
+###        ifeq ($(KBUILD_SRC)/,$(dir $(CURDIR)))
+###                # building in a subdirectory of the source tree
+###                srctree := ..
+###        else
+###                srctree := $(KBUILD_SRC)
+###        endif
+###endif
 srctree		:= $(if $(KBUILD_SRC),$(KBUILD_SRC),$(CURDIR))
 TOPDIR		:= $(srctree)
 # FIXME - TOPDIR is obsolete, use srctree/objtree
@@ -80,11 +95,25 @@ tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
 
 prefix := $(PREFIX)
 
-export LDFLAGS ?= -static
+export LDFLAGS = -static
 ifdef CROSS_COMPILE
-CC = $(CROSS_COMPILE)gcc
-host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
-arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
+CC		 = $(CROSS_COMPILE)gcc
+CXX		 = $(CROSS_COMPILE)g++
+AR		 = $(CROSS_COMPILE)ar
+RANLIB		 = $(CROSS_COMPILE)-ranlib
+AS		 = $(CROSS_COMPILE)as
+LD		 = $(CC) -nostdlib
+CPP		 = $(CC) -E
+AR		 = $(CROSS_COMPILE)ar
+NM		 = $(CROSS_COMPILE)nm
+STRIP		 = $(CROSS_COMPILE)strip
+OBJCOPY		 = $(CROSS_COMPILE)objcopy
+OBJDUMP		 = $(CROSS_COMPILE)objdump
+PKG_CONFIG	?= $(CROSS_COMPILE)pkg-config
+build		:= $(shell uname -m | sed -e 's,_,-,' -e 's,$$,-linux-gnu,')
+host		:= $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
+arch		:= $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
+sysroot		:= $(shell $(CC) -print-sysroot)
 endif
 
 linux_defconfig	?= $(CONFIG_LINUX_DEFCONFIG)
@@ -102,7 +131,7 @@ packages ?= install-initramfs/ramfs.tgz
 PACKAGES += initramfs.inc
 include $(PACKAGES)
 
-.SILENT:: initramfs.cpio
+#.SILENT:: initramfs.cpio
 
 .PHONY:: all clean
 

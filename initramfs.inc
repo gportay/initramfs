@@ -11,18 +11,18 @@ endif
 
 ifeq (y,$(CONFIG_BUSYBOX))
 packages	+= install-initramfs/busybox.tgz
-include busybox.inc
 endif
+include busybox.inc
 
 ifeq (y,$(CONFIG_INPUT_EVENTD))
 packages	+= install-initramfs/input-eventd.tgz
-include input-eventd.inc
 endif
+include input-eventd.inc
 
 ifeq (y,$(CONFIG_KEXEC_TOOLS))
 packages	+= install-initramfs/kexec-tools.tgz
-include kexec-tools.inc
 endif
+include kexec-tools.inc
 
 ifeq (y,$(CONFIG_PROFILE))
 packages	+= install-initramfs/profile.tgz

@@ -9,6 +9,10 @@ case "$TERM" in
     *)       PS1='\u@\h:\w\$ ';;
 esac
 
+if [ -n "$chroot" ]; then
+	PS1="($chroot) $PS1"
+fi
+
 # some more aliases
 alias ll='ls -alF'
 alias la='ls -A'
