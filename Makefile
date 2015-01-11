@@ -87,8 +87,12 @@ host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
 endif
 
-LINUXDIR	?= linux
-IMAGE		?= zImage
+linux_defconfig	?= $(CONFIG_LINUX_DEFCONFIG)
+LINUX_DEFCONFIG	?= $(if $(linux_defconfig),$(linux_defconfig),at91_dt_defconfig)
+linuxdir	?= $(CONFIG_LINUXDIR)
+LINUXDIR	?= $(if $(linuxdir),$(linuxdir),linux)
+image		?= $(CONFIG_IMAGE)
+IMAGE		?= $(if $(image),$(image),zImage)
 arch		?= $(shell uname -m)
 export ARCH = $(arch)
 
