@@ -2,10 +2,6 @@
 
 kexec-tools:: kexec-tools/build/sbin/kexec
 
-kexec-tools/configure: kexec-tools/configure.ac
-	@echo -e "\e[1mAutoConfiguring kexec-tools)...\e[0m"
-	( cd kexec-tools && autoreconf -vif )
-
 kexec-tools/Makefile: kexec-tools/configure
 	@echo -e "\e[1mConfiguring kexec-tools...\e[0m"
 	( cd kexec-tools && ./configure --prefix=$(prefix) --host=$(host) )
