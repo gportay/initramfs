@@ -20,9 +20,14 @@ install-initramfs/kexec-tools.tgz: packages-initramfs/kexec-tools
 kexec-tools_%::
 	make -C kexec-tools $*
 
-kexec-tools_clean:
+kexec-tools_clean::
+	-make -C kexec-tools clean
 	rm -f install-initramfs/kexec-tools.tgz
 
-kexec-tools_mrproper: kexec-tools_clean
-	make -C kexec-tools distclean
+kexec-tools_cleanall:: kexec-tools_clean
+	-make -C kexec-tools distclean
 	rm -Rf packages-initramfs/kexec-tools/*
+
+clean:: kexec-tools_clean
+
+mrproper:: kexec-tools_cleanall

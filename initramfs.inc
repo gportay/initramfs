@@ -21,8 +21,6 @@ endif
 
 ifeq (y,$(CONFIG_KEXEC_TOOLS))
 packages	+= install-initramfs/kexec-tools.tgz
-clean		+= kexec-tools_clean
-mrproper	+= kexec-tools_mrproper
 include kexec-tools.inc
 endif
 

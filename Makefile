@@ -75,10 +75,10 @@ $(IMAGE): $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE)
 
 kernel: $(IMAGE)
 
-clean:: $(clean)
+clean::
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
 
 reallyclean:: clean
 
-mrproper:: reallyclean $(mrproper)
+mrproper:: reallyclean
 	rm -f *Image *.dtb
