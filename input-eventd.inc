@@ -19,6 +19,6 @@ input-eventd_cleanall: input-eventd_clean
 	rm -f input-eventd/*.o input-eventd/input-eventd
 	rm -Rf packages-initramfs/input-eventd/*
 
-clean:: input-eventd_clean
+reallyclean:: input-eventd_clean
 
 mrproper:: input-eventd_cleanall
