@@ -60,7 +60,11 @@ initramfs.cpio: $(packages)
 $(LINUXDIR)_%s:
 	make -C $(LINUXDIR) $*
 
-$(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio
+$(LINUXDIR)/.config:
+	@echo -e "\e[1mConfiguring kernel for $(ARCH) using $(DEFCONFIG)...\e[0m"
+	if test -e $(DEFCONFIG); then cp $(DEFCONFIG) $(LINUXDIR)/.config; else make -C $(LINUXDIR) $(DEFCONFIG); fi
+
+$(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio $(LINUXDIR)/.config
 	@echo -e "\e[1mBuilding $(IMAGE) for $(ARCH)...\e[0m"
 	make -C $(LINUXDIR) ${@F} CONFIG_INITRAMFS_SOURCE=../$<
 
