@@ -25,8 +25,8 @@ endif
 
 ifeq (1,${KEXEC_TOOLS})
 packages	+= install-initramfs/kexec-tools.tgz
-include kexec-tools.inc
 endif
+include kexec-tools.inc
 
 ifneq (0,${PROFILE})
 packages	+= install-initramfs/profile.tgz

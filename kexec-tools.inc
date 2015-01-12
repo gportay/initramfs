@@ -1,4 +1,6 @@
-kexec-tools: kexec-tools/build/sbin/kexec
+.PHONY:: kexec-tools
+
+kexec-tools:: kexec-tools/build/sbin/kexec
 
 kexec-tools/configure: kexec-tools/configure.ac
 	@echo -e "\e[1mAutoConfiguring kexec-tools)...\e[0m"
@@ -24,6 +26,17 @@ install-initramfs/kexec-tools.tgz: packages-initramfs/kexec-tools/usr/sbin/kexec
 
 kexec-tools_%::
 	make -C kexec-tools $*
+
+kexec-tools:: kexec-tools_all
+
+kexec-tools_configure:
+	make -f Makefile kexec-tools/Makefile
+
+kexec-tools_compile:
+	make -f Makefile kexec-tools/build/sbin/kexec
+
+kexec-tools_install:
+	make -f Makefile packages-initramfs/kexec-tools/usr/sbin/kexec
 
 kexec-tools_clean::
 	-make -C kexec-tools clean
