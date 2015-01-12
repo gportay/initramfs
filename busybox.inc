@@ -9,12 +9,11 @@ busybox/busybox: busybox/.config
 	@echo -e "\e[1mCompiling busybox...\e[0m"
 	make -C busybox
 
-packages-initramfs/busybox: busybox/busybox
+packages-initramfs/busybox/bin/busybox: busybox/busybox
 	@echo -e "\e[1mInstalling busybox...\e[0m"
-	make -C busybox install CONFIG_PREFIX=../$@
-	touch $@
+	make -C busybox install CONFIG_PREFIX=$(CURDIR)/packages-initramfs/busybox
 
-install-initramfs/busybox.tgz: packages-initramfs/busybox
+install-initramfs/busybox.tgz: packages-initramfs/busybox/bin/busybox
 
 busybox_clean:
 	-make -C busybox clean
