@@ -1,4 +1,6 @@
-busybox: busybox/busybox
+.PHONY:: busybox
+
+busybox:: busybox/busybox
 
 busybox/.config: busybox_defconfig
 	@echo -e "\e[1mConfiguring busybox...\e[0m"
@@ -18,6 +20,8 @@ install-initramfs/busybox.tgz: packages-initramfs/busybox
 
 busybox_%::
 	make -C busybox $*
+
+busybox:: busybox_all
 
 busybox_clean:
 	-make -C busybox clean
