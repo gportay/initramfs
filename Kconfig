@@ -2,11 +2,11 @@
 # For a description of the syntax of this configuration file,
 # see ./share/doc/kconfig-frontends/kconfig-language.txt.
 #
-mainmenu "InitRAMFS Configuration"
+mainmenu "InitRAMFS $INITRAMFSVERSION Configuration"
 
 config CROSS_COMPILER_PREFIX
 	string "Cross Compiler prefix"
-	default ""
+	default "arm-atmel-linux-musleabi-"
 	help
 	  If you want to build BusyBox with a cross compiler, then you
 	  will need to set this to the cross-compiler prefix, for example,

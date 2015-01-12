@@ -5,3 +5,21 @@ if [ -e /dev/console ]; then
 	exec  >/dev/console
 	exec 2>/dev/console
 fi
+
+if [ -z "$CONSOLE" ]; then
+	console=$(sed -n "s,.*console=\([a-zA-Z0-9,]*\).*$,\1,p" /proc/cmdline)
+	if [ -n "$console" ]; then
+		tty=$(echo "$console" | cut -d, -f1)
+		baudrate=$(echo "$console" | cut -d, -f2)
+		CONSOLE=$tty
+	fi
+fi
+
+if [ -n "$CONSOLE" ]; then
+	export CONSOLE=$CONSOLE
+	if [ ! -e /dev/console ]; then
+		exec  </dev/$CONSOLE
+		exec  >/dev/$CONSOLE
+		exec 2>/dev/$CONSOLE
+	fi
+fi
