@@ -14,7 +14,6 @@ busybox/busybox: busybox/.config
 packages-initramfs/busybox: busybox/busybox
 	@echo -e "\e[1mInstalling busybox...\e[0m"
 	make -C busybox install CONFIG_PREFIX=../$@
-	touch $@
 
 install-initramfs/busybox.tgz: packages-initramfs/busybox
 
