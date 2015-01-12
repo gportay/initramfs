@@ -11,8 +11,8 @@ endif
 
 ifneq (0,${BUSYBOX})
 packages	+= install-initramfs/busybox.tgz
-include busybox.inc
 endif
+include busybox.inc
 
 ifeq (1,${INPUT_EVENTD})
 packages	+= install-initramfs/input-eventd.tgz
