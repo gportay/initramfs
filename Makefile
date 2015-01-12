@@ -63,5 +63,7 @@ kernel: $(IMAGE)
 clean:: $(clean)
 	rm -f install-*/*.tgz initramfs.cpio $(IMAGE)
 
-mrproper:: clean $(mrproper)
+reallyclean:: clean
+
+mrproper:: reallyclean $(mrproper)
 	rm -f *Image *.dtb
