@@ -8,7 +8,7 @@ kexec-tools/Makefile: kexec-tools/configure
 
 kexec-tools/build/sbin/kexec: kexec-tools/Makefile
 	@echo -e "\e[1mCompiling kexec-tools...\e[0m"
-	( cd kexec-tools && make kexec )
+	( cd kexec-tools && make && make kexec )
 
 packages-initramfs/kexec-tools: kexec-tools/build/sbin/kexec
 	@echo -e "\e[1mInstalling kexec-tools...\e[0m"
