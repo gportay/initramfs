@@ -39,6 +39,9 @@ busybox_cleanall:
 	-make -C busybox mrproper
 	rm -Rf packages-initramfs/busybox/*
 
+check::
+	file busybox/busybox
+
 reallyclean::
 	-make -f Makefile busybox_clean
 
