@@ -3,7 +3,7 @@ busybox: busybox/busybox
 busybox/.config: busybox_defconfig
 	@echo -e "\e[1mConfiguring busybox...\e[0m"
 	cp $< $@
-	make -C busybox oldconfig
+	yes "" | make -C busybox oldconfig
 
 busybox/busybox: busybox/.config
 	@echo -e "\e[1mCompiling busybox...\e[0m"
