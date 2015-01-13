@@ -18,7 +18,7 @@ prefix := $(PREFIX)
 
 export LDFLAGS ?= -static
 ifdef CROSS_COMPILE
-export CC = $(CROSS_COMPILE)gcc
+CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
 endif
