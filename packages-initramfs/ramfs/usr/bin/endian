@@ -1,0 +1,8 @@
+#!/bin/sh
+
+little=$(echo -n I | od -to2 | head -n1 | cut -f2 -d' ' | cut -c6)
+if test $little -eq 1; then
+	echo little
+else
+	echo big
+fi

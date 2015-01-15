@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cat $1 | od -An -x | sed 's, ,,g' | if test $(endian) = little; then while IFS= read -r -n4 b; do echo -n ${b:6:2}${b:4:2}${b:2:2}${b:0:2}; done; else cat; fi
