@@ -1,0 +1,5 @@
+#!/bin/sh
+
+init=${0##*/}
+init=${init:2}
+test -x /etc/init.d/$init && /etc/init.d/$init $*
