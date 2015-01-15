@@ -1,0 +1,19 @@
+#!/bin/sh -e
+
+DEVICE=${2:-pwm\:red\:user}
+
+case "$1" in
+start)
+	if ! grep -qF "[cycle]" /sys/class/leds/$DEVICE/trigger; then
+		echo cycle >/sys/class/leds/$DEVICE/trigger
+		echo start >/sys/class/leds/$DEVICE/control
+	fi
+	;;
+stop)
+	if grep -qF "[cycle]" /sys/class/leds/$DEVICE/trigger; then
+		echo stop >/sys/class/leds/$DEVICE/control
+		echo default-on >/sys/class/leds/$DEVICE/trigger
+	fi
+	;;
+*)
+esac

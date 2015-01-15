@@ -1,0 +1,4 @@
+#!/bin/sh -e
+
+dev=${0##*/}
+/etc/init.d/led $1 $dev

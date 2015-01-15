@@ -21,6 +21,10 @@ packages	+= install-initramfs/input-eventd.tgz
 include input-eventd.inc
 endif
 
+ifneq (0,${PWM_LED})
+packages	+= install-initramfs/led.tgz
+endif
+
 ifeq (1,${KEXEC_TOOLS})
 packages	+= install-initramfs/kexec-tools.tgz
 clean		+= kexec-tools_clean
