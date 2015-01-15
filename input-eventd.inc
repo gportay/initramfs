@@ -2,15 +2,14 @@ input-eventd/input-eventd: input-eventd/input-eventd.c
 	@echo -e "\e[1mCompiling input-eventd...\e[0m"
 	make -C input-eventd input-eventd
 
-packages-initramfs/input-eventd: input-eventd/input-eventd input-eventd/input-event.action
+packages-initramfs/input-eventd/usr/sbin/input-eventd: input-eventd/input-eventd input-eventd/input-event.action
 	@echo -e "\e[1mInstalling input-eventd...\e[0m"
-	install -d $@/usr/sbin/
-	install -m 755 input-eventd/input-eventd $@/usr/sbin/
-	install -d $@/usr/share/input-eventd/
-	install -m 755 input-eventd/input-event.action $@/usr/share/
-	touch $@
+	install -d $(@D)
+	install -m 755 $< $@
+	install -d packages-initramfs/input-eventd/usr/share/input-eventd/
+	install -m 755 input-eventd/input-event.action packages-initramfs/input-eventd/usr/share/
 
-install-initramfs/input-eventd.tgz: packages-initramfs/input-eventd
+install-initramfs/input-eventd.tgz: packages-initramfs/input-eventd/usr/sbin/input-eventd
 
 input-eventd_clean:
 	rm -f install-initramfs/input-eventd.tgz
