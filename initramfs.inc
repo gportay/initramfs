@@ -14,6 +14,11 @@ packages	+= install-initramfs/busybox.tgz
 endif
 include busybox.inc
 
+ifneq (1,${TOYBOX})
+packages	+= install-initramfs/toybox.tgz
+endif
+include toybox.inc
+
 ifeq (1,${INPUT_EVENTD})
 packages	+= install-initramfs/input-eventd.tgz
 endif

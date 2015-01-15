@@ -7,3 +7,6 @@
 [submodule "linux"]
 	path = linux
 	url = git@github.com:gazoo74/linux.git
+[submodule "toybox"]
+	path = toybox
+	url = git@github.com:gfto/toybox.git
