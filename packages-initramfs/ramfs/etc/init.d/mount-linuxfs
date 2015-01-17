@@ -4,6 +4,7 @@
 [ -d '/proc/1' ]                           || mount /proc             || mount -t proc     none /proc
 grep -Eq '/sys '              /proc/mounts || mount /sys              || mount -t sysfs    none /sys
 grep -Eq '/sys/kernel/debug ' /proc/mounts || mount /sys/kernel/debug || mount -t debugfs  none /sys/kernel/debug
+grep -Eq '/config '           /proc/mounts || mount /config           || mount -t configfs none /config
 
 # Ensure devtmpfs is mounted, it must be done manually with initramfs
 grep -Eq '/dev '              /proc/mounts || mount /dev              || mount -t tmpfs    none /dev

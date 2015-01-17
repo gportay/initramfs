@@ -9,5 +9,6 @@ proc             /proc             proc      defaults                           
 devtmpfs         /dev              devtmpfs  noauto                              0     0
 sysfs            /sys              sysfs     defaults                            0     0
 debugfs          /sys/kernel/debug debugfs   defaults                            0     0
+configfs         /config           configfs  defaults                            0     0
 devpts           /dev/pts          devpts    noauto                              0     0
 tmpfs            /tmp              tmpfs     mode=0755,nodev,nosuid,strictatime  0     0
