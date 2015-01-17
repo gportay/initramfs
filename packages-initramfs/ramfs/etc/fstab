@@ -4,9 +4,10 @@
 # device; this may be used with UUID= as a more robust way to name devices
 # that works even if disks are added and removed. See fstab(5).
 #
-# <file system> <mount point>   <type>    <options>                          <dump> <pass>
-proc             /proc           proc      defaults                            0     0
-devtmpfs         /dev            devtmpfs  noauto                              0     0
-sysfs            /sys            sysfs     defaults                            0     0
-devpts           /dev/pts        devpts    noauto                              0     0
-tmpfs            /tmp            tmpfs     mode=0755,nodev,nosuid,strictatime  0     0
+# <file system> <mount point>      <type>    <options>                          <dump> <pass>
+proc             /proc             proc      defaults                            0     0
+devtmpfs         /dev              devtmpfs  noauto                              0     0
+sysfs            /sys              sysfs     defaults                            0     0
+debugfs          /sys/kernel/debug debugfs   defaults                            0     0
+devpts           /dev/pts          devpts    noauto                              0     0
+tmpfs            /tmp              tmpfs     mode=0755,nodev,nosuid,strictatime  0     0
