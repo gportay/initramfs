@@ -71,7 +71,7 @@ help::
 
 install-initramfs/%.tgz:
 	@echo "Building package $*..."
-	( cd packages-initramfs/$* && tar czf ../../$@ --exclude=.gitignore * )
+	( cd packages-initramfs/$* && fakeroot -- tar czf ../../$@ --exclude=.gitignore * )
 
 $(tmpdir)/ramfs: $(tgz-y)
 	@for tgz in $(tgz-y); do echo " - $${tgz##*/}"; done

@@ -13,5 +13,5 @@ tgz-$(CONFIG_OVERLAY_FS)	+= install-initramfs/overlay.tgz
 install-at91-sama5d3_xplained/%.tgz:
 	@echo "Building package $*..."
 	install -d $(@D)
-	( cd packages-at91-sama5d3_xplained/$* && tar czf ../../$@ --exclude=.gitignore * )
+	( cd packages-at91-sama5d3_xplained/$* && fakeroot -- tar czf ../../$@ --exclude=.gitignore * )
 
