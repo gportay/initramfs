@@ -34,7 +34,7 @@ karch		:= $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 archimage	:= bzImage
 endif
 
-export ARCH = $(karch)
+ARCH = $(karch)
 
 ifeq ($(CONFIG_HAVE_DOT_CONFIG),y)
 all:: initramfs.cpio
