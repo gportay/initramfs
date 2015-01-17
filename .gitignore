@@ -1,5 +1,6 @@
 *~
 install-initramfs/
+packages-initramfs/modules/
 packages-initramfs/busybox/
 packages-initramfs/toybox/
 packages-initramfs/input-event.d/

@@ -8,6 +8,7 @@ tgz-$(CONFIG_PWM_LED)		+= install-initramfs/led.tgz
 tgz-$(CONFIG_KEXEC_TOOLS)	+= install-initramfs/kexec-tools.tgz
 tgz-$(CONFIG_PROFILE)		+= install-initramfs/profile.tgz
 tgz-$(CONFIG_DROPBEAR)		+= install-initramfs/dropbear.tgz
+tgz-$(CONFIG_MODULES)		+= install-initramfs/modules.tgz
 
 include busybox.mk
 include toybox.mk
@@ -15,3 +16,4 @@ include input-eventd.mk
 include kexec-tools.mk
 include dropbear.mk
 include kernel.mk
+include modules.mk
