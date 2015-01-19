@@ -1,10 +1,18 @@
 #!/bin/sh
 
-login="${LOGIN:-/bin/login -p}"
-
 # Execute a login on exit and respawn
 oops() {
 	[ $? -eq 0 -a $$ -ne 1 ] && return
+
+	login=$LOGIN
+	if [ -z "$login" ]; then
+		tty=$(cttyhack | sed -e 's,^/dev/,,')
+		if [ -n "$tty" -a "$tty" != tty ]; then
+			login="/sbin/getty $tty 115200"
+		else
+			login="/bin/login -p"
+		fi
+	fi
 
 	while true; do
 		$login || err=$?
