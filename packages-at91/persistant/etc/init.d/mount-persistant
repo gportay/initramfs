@@ -3,7 +3,7 @@
 mountdir=${MOUNTDIR:-/media/persistant}
 
 if [ "${1:-start}" = "start" ]; then
-	mount -t ubifs ubi0:persistant $mountdir
+	mount -t ubifs ubi0:persistant $mountdir $MOUNTOPTS
 else
 	umount $mountdir
 fi

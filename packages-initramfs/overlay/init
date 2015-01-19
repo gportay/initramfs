@@ -26,6 +26,8 @@ EOF
 . /etc/init.d/oops
 
 initargs="$*"
+PERSISTANTDIR=/media/persistant
+OVERLAYDIR=/media/root-overlay
 while [ $# -ne 0 ]; do
 	if [ "$1" = -h ] || [ "$1" = --help ]; then
 		usage
@@ -53,18 +55,21 @@ while [ $# -ne 0 ]; do
 	shift
 done
 
-persistantdir=/media/persistant
-echo "Mounting persistant directory to $persistantdir..."
+echo "Mounting persistant directory to $PERSISTANTDIR..."
+MOUNTDIR=$PERSISTANTDIR MOUNTOPTS=$PERSISTANTOPTS \
 /etc/init.d/mount-persistant start
 
-chrootdir=/media/root-overlay
-echo "Mounting overlay directory to $chrootdir..."
+
+echo "Mounting overlay directory to $OVERLAYDIR..."
+MOUNTDIR=$OVERLAYDIR PERSISTANTDIR=$PERSISTANTDIR MOUNTOPTS=$OVERLAYOPTS \
 /etc/init.d/mount-overlay start
 
 for init in /sbin/init /etc/init /bin/init /bin/sh; do
 	[ -e $chrootdir/$init ] && break
 done
 
+chrootdir=$OVERLAYDIR
+install -d $chrootdir
 echo "Installing chroot to $chrootdir..."
 for dir in /dev /sys /proc; do
 	mount -o bind $dir $chrootdir$dir
