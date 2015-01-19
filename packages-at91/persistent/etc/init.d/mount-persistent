@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+mountdir=${MOUNTDIR:-/media/persistent}
+
+if [ "${1:-start}" = "start" ]; then
+	mount -t ubifs ubi0:persistent $mountdir $MOUNTOPTS
+else
+	umount $mountdir
+fi
