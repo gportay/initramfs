@@ -60,23 +60,23 @@ MOUNTDIR=$PERSISTENTDIR MOUNTOPTS=$PERSISTENTOPTS \
 /etc/init.d/mount-persistent start
 
 
-echo "Mounting overlay directory to $OVERLAYDIR..."
-MOUNTDIR=$OVERLAYDIR PERSISTENTDIR=$PERSISTENTDIR MOUNTOPTS=$OVERLAYOPTS \
+echo "Mounting overlay directory to $CHROOTDIR..."
+MOUNTDIR=$CHROOTDIR PERSISTENTDIR=$PERSISTENTDIR MOUNTOPTS=$OVERLAYOPTS \
 /etc/init.d/mount-overlay start
 
 for init in /sbin/init /etc/init /bin/init /bin/sh; do
-	[ -e $chrootdir/$init ] && break
+	[ -e $CHROOTDIR/$init ] && break
 done
 
+install -d $CHROOTDIR
 chrootdir=$OVERLAYDIR
-install -d $chrootdir
-echo "Installing chroot to $chrootdir..."
+echo "Installing chroot to $CHROOTDIR..."
 for dir in /dev /sys /proc; do
-	mount -o bind $dir $chrootdir$dir
+	mount -o bind $dir $CHROOTDIR$dir
 done
 
 echo "Chrooting to $chrootdir..."
-chroot=$chrootdir exec chroot $chrootdir $init $initargs
+chroot=$CHROOTDIR exec chroot $CHROOTDIR $init $initargs
 
 echo "Oops... ${0##*/} is about to exit!" >&2
 exit 1
