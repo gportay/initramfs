@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+PRIORITY=${2:-5}
+NAME="logging messages with $PRIORITY" \
+DESC="Kernel logger daemon" \
+ARGS="-n -c $PRIORITY" \
+HELP="[PRIORITY=5]" \
+/usr/share/init.d/${0##*/} $*

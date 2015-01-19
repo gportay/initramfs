@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+PRIORITY=${2:-5}
+LOGFILE=${3:-/var/log/messages}
+NAME="logging messages with $PRIORITY to $LOGFILE" \
+DESC="System logger daemon" \
+ARGS="-n -l $PRIORITY -O $LOGFILE" \
+HELP="[PRIORITY=5] [LOGFILE=/var/log/messages]" \
+/usr/share/init.d/${0##*/} $*

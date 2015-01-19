@@ -114,6 +114,13 @@ config INET
 	help
 	  Internet superserver daemon
 
+config LOG
+	bool "Log - syslog and klog"
+	default n
+	help
+	  This option allows InitRAMFS to have support for syslog and klog
+	  daemons.
+
 config PROFILE
 	bool ".profile support"
 	default y
