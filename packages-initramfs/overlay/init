@@ -9,14 +9,13 @@ die() {
 
 usage() {
 	cat <<EOF
-Usage: ${0##*/} [OPTIONS] [RUNLEVEL]
+Usage: ${0##*/} [OPTIONS]
 
 Options:
- -D or --debug          Turn on debug mode.
- -q or --quiet          Turn off verbosity.
- -v or --verbose        Turn on verbosity.
- -h or --help           Display this message.
- -V or --version        Display the version.
+ persistentdir=DIR      Set persistent mount point [default: /media/persistent]
+ persistentopts=OPTS    Set persistent mount options [ex: -osync].
+ chrootdir=DIR          Set chroot directory [default: /media/chroot].
+ chrootopts=OPTS        Setplay this message.
 EOF
 }
 
@@ -29,28 +28,13 @@ initargs="$*"
 PERSISTENTDIR=/media/persistent
 OVERLAYDIR=/media/root-overlay
 while [ $# -ne 0 ]; do
-	if [ "$1" = -h ] || [ "$1" = --help ]; then
-		usage
-		exit 0
-	elif [ "$1" = "-V" ] || [ "$1" = "--version" ] ; then
-		echo $VERSION
-		exit 0
-	elif [ "$1" = "-c" ] || [ "$1" = "--console" ] ; then
-		shift
-		console=$1
-	elif [ "$1" = -D ] || [ "$1" = debug ]; then
-		export DEBUG=1
-	elif [ "$1" = -v ] || [ "$1" = verbose ]; then
-		export VERBOSE=1
-	elif [ "$1" = -q ] || [ "$1" = quiet ]; then
-		export QUIET=1
-	elif echo "$1" | grep -qE "^[a-zA-Z0-9_]+="; then
-		var=$(echo $1 | cut -d= -f1)
-		val=$(echo $1 | cut -d= -f2)
+	if echo "$1" | grep -qE "^ramfs\.[a-zA-Z0-9_]+="; then
+		v=$(echo $1 | cut -d. -f2)
+		var=$(echo $v | cut -d= -f1 | sed -e 's,.,\U&,g')
+		val=$(echo $v | cut -d= -f2)
 		export $var=$val
 	else
-		usage
-		die "Too many arguments!"
+		initargs="$initargs $1"
 	fi
 	shift
 done
