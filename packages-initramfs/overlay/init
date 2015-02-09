@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-VERSION=0.1
+VERSION=0.2
 
 die() {
 	echo "Error: $*" >&2
