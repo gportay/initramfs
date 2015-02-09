@@ -71,7 +71,7 @@ done
 install -d $CHROOTDIR
 chrootdir=$OVERLAYDIR
 echo "Installing chroot to $CHROOTDIR..."
-for dir in /dev /sys /proc; do
+for dir in /dev /dev/pts /sys /proc; do
 	mount -o bind $dir $CHROOTDIR$dir
 done
 
