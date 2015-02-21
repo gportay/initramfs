@@ -16,8 +16,8 @@ include busybox.inc
 
 ifeq (1,${INPUT_EVENTD})
 packages	+= install-initramfs/input-eventd.tgz
-include input-eventd.inc
 endif
+include input-eventd.inc
 
 ifneq (0,${PWM_LED})
 packages	+= install-initramfs/led.tgz

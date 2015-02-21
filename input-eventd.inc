@@ -17,6 +17,14 @@ packages-initramfs/input-eventd/usr/sbin/input-eventd: input-eventd/input-eventd
 
 install-initramfs/input-eventd.tgz: packages-initramfs/input-eventd/usr/sbin/input-eventd
 
+input-eventd:: input-eventd/input-eventd
+
+input-eventd_compile:
+	make -f Makefile input-eventd/input-eventd
+
+input-eventd_install:
+	make -f Makefile packages-initramfs/input-eventd/usr/sbin/input-eventd
+
 input-eventd_clean:
 	rm -f install-initramfs/input-eventd.tgz
 
