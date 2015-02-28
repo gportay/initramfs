@@ -1,0 +1,9 @@
+#!/bin/sh -e
+
+if [ ${ACTION:-add} = add ]; then
+	action=start
+else
+	action=stop
+fi
+
+/etc/init.d/${0##*/} $action $*

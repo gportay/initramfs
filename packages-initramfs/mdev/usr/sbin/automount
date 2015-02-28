@@ -1,0 +1,78 @@
+#!/bin/sh -e
+
+VERSION=0.1
+
+die() {
+	echo "Error: $*" >&2
+	exit 1
+}
+
+usage() {
+  cat <<EOF
+Usage: ${0##*/} [OPTIONS] DEVICE [MOUNTDIR]
+
+Options:
+ -q or --quiet          Turn off verbosity.
+ -h or --help           Display this message.
+ -v or --version        Display the version.
+EOF
+}
+
+blkid_export() {
+        args=$(blkid $1 | sed 's,^[a-zA-Z0-9/+-]*: ,,')
+        set $args
+	while [ $# -ne 0 ]; do
+		if echo "$1" | grep -qE "^[a-zA-Z0-9_]+="; then
+			var=$(echo $1 | cut -d= -f1)
+			val=$(echo $1 | cut -d= -f2 | sed -e 's,^",,' -e 's,"$,,')
+			export $var=$val
+		else
+			echo "Warning: Argument $1 has no value!"
+		fi
+		shift
+	done
+	unset args
+}
+
+while [ $# -ne 0 ]; do
+	if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+		usage
+		exit 0
+	elif [ "$1" = "-V" ] || [ "$1" = "--version" ]; then
+		echo $VERSION
+		exit 0
+	elif [ "$1" = "-q" ] || [ "$1" = "--quiet" ]; then
+		QUIET=1
+	elif [ -z "$devpath" ]; then
+		devpath=$1
+	elif [ -z "$mountdir" ]; then
+		mountdir=$1
+	else
+		usage
+		die "Too many arguments!"
+	fi
+	shift
+done
+
+[ -n "$devpath" ] || {
+	usage
+	die "Too few arguments!"
+}
+
+blkid_export $devpath
+
+devname=${devpath##*/}
+mountdir=${mountdir:-/media}/${LABEL:-${devname}}
+
+id=
+ext=
+while grep -q $mountdir$ext /proc/mounts; do
+	id=$(($id + 1))
+	ext=_$id
+done
+
+mountdir=$mountdir$ext
+[ -d $mountdir ] || install -d $mountdir
+mount $OPTS $devname $mountdir -v | logger -p user.notice -t ${0##*/}
+
+MOUNTDIR=$mountdir run-parts --arg mount --arg $devname /usr/share/${0##*/}/

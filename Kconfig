@@ -121,6 +121,13 @@ config LOG
 	  This option allows InitRAMFS to have support for syslog and klog
 	  daemons.
 
+config MDEV
+	bool "mdev - mini-udev implementation"
+	default n
+	help
+	  mdev is a mini-udev implementation for dynamically creating device
+	  nodes in the /dev directory.
+
 config PROFILE
 	bool ".profile support"
 	default y

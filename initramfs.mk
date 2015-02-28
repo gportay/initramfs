@@ -10,6 +10,7 @@ tgz-$(CONFIG_PROFILE)		+= install-initramfs/profile.tgz
 tgz-$(CONFIG_DROPBEAR)		+= install-initramfs/dropbear.tgz
 tgz-$(CONFIG_MODULES)		+= install-initramfs/modules.tgz
 tgz-$(CONFIG_LOG)		+= install-initramfs/log.tgz
+tgz-$(CONFIG_MDEF)		+= install-initramfs/mdev.tgz
 
 include busybox.mk
 include toybox.mk

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ $ACTION = add ]; then
+	OPTS=-osync /usr/sbin/automount /dev/$1
+elif [ $ACTION = remove ]; then
+	grep -E ^$1 /proc/mounts | while read line; do
+		mountdir=$(echo "$line" | cut -d' ' -f2)
+		umount $mountdir
+	done
+fi
