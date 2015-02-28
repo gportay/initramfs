@@ -9,6 +9,7 @@ endif
 
 tgz-$(CONFIG_OVERLAY_FS)	+= install-at91/persistent.tgz
 tgz-$(CONFIG_OVERLAY_FS)	+= install-initramfs/overlay.tgz
+tgz-y				+= install-at91-sama5d3_xplained/ubi.tgz
 
 install-at91-sama5d3_xplained/%.tgz:
 	@echo "Building package $*..."
