@@ -1,7 +1,22 @@
 #!/bin/sh
 
-if [ -e /dev/console ]; then
-	exec  </dev/console
-	exec  >/dev/console
-	exec 2>/dev/console
+echo initial >/dev/ttyS0
+ls -l /proc/$$/fd >/dev/ttyS0
+
+tty=/dev/console
+if [ -e /dev/tty ]; then
+	tty=$(cttyhack || echo /dev/console)
+	echo tty=$tty >/dev/ttyS0
 fi
+
+echo before exec >/dev/ttyS0
+ls -l /proc/$$/fd >/dev/ttyS0
+
+exec  <$tty
+exec  >$tty
+exec 2>$tty
+
+echo after exec >/dev/ttyS0
+ls -l /proc/$$/fd >/dev/ttyS0
+
+export LOGIN="/sbin/getty $tty 115200"

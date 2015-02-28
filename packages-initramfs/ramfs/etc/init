@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 VERSION=0.2
 export PATH=/usr/bin:/usr/sbin:/bin:/sbin

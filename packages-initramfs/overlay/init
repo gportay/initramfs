@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 VERSION=0.2
 
@@ -24,9 +24,8 @@ EOF
 . /etc/init.d/console
 . /etc/init.d/oops
 
-initargs="$*"
 PERSISTENTDIR=/media/persistent
-OVERLAYDIR=/media/root-overlay
+CHROOTDIR=/media/chroot
 while [ $# -ne 0 ]; do
 	if echo "$1" | grep -qE "^ramfs\.[a-zA-Z0-9_]+="; then
 		v=$(echo $1 | cut -d. -f2)
@@ -43,7 +42,6 @@ echo "Mounting persistent directory to $PERSISTENTDIR..."
 MOUNTDIR=$PERSISTENTDIR MOUNTOPTS=$PERSISTENTOPTS \
 /etc/init.d/mount-persistent start
 
-
 echo "Mounting overlay directory to $CHROOTDIR..."
 MOUNTDIR=$CHROOTDIR PERSISTENTDIR=$PERSISTENTDIR MOUNTOPTS=$OVERLAYOPTS \
 /etc/init.d/mount-overlay start
@@ -53,7 +51,6 @@ for init in /sbin/init /etc/init /bin/init /bin/sh; do
 done
 
 install -d $CHROOTDIR
-chrootdir=$OVERLAYDIR
 echo "Installing chroot to $CHROOTDIR..."
 for dir in /dev /dev/pts /sys /proc; do
 	mount -o bind $dir $CHROOTDIR$dir

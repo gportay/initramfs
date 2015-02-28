@@ -46,3 +46,4 @@ reallyclean::
 
 mrproper::
 	-make -f Makefile busybox_cleanall
+	rm -Rf packages-initramfs/busybox/*

@@ -1,3 +1,5 @@
+#export MODULES = 1
+
 VERSION		 = 0
 PATCHLEVEL	 = 0
 SUBLEVEL	 = 1
@@ -34,7 +36,7 @@ karch		:= $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 archimage	:= bzImage
 endif
 
-ARCH = $(karch)
+export ARCH = $(karch)
 
 ifeq ($(CONFIG_HAVE_DOT_CONFIG),y)
 all:: initramfs.cpio
@@ -43,7 +45,7 @@ all:: menuconfig
 endif
 
 tgz-y		?= install-initramfs/ramfs.tgz
-include initramfs.mk
+include initramfs.mk at91-sama5d3_xplained.mk
 
 .SILENT:: initramfs.cpio version help
 
@@ -115,3 +117,7 @@ clean::
 reallyclean:: clean
 
 mrproper:: reallyclean
+
+#./scripts/config -m CONFIG_USB_ETH -e CONFIG_USB_ETH_RNDIS -e CONFIG_USB_OTG_UTILS -e CONFIG_NOP_USB_XCEIV
+# -e CONFIG_USB_SW_SUNXI_USB -e CONFIG_USB_SW_SUNXI_USB_MANAGER -e CONFIG_USB_SW_SUNXI_USB0_OTG
+#http://linux-sunxi.org/USB_Gadget
