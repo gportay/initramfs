@@ -34,6 +34,8 @@ mrproper::
 	rm -f local-*.cfg
 endif
 
+KEXTRADEFCONFIG += linux.cfg
+
 linux/Makefile:
 	@echo "You need to provide your own kernel sources into the $(CURDIR)/$(@D) directory!" >&2
 	@echo "Have a look at https://www.kernel.org! or run one of the commands below:" >&2
