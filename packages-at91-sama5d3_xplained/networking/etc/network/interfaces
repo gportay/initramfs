@@ -7,6 +7,8 @@ iface lo inet loopback
 # Wired interfaces
 auto eth0
 iface eth0 inet dhcp
+       hwaddress ether CA:FE:DE:CA:00:00
 
 auto eth1
 iface eth1 inet dhcp
+       hwaddress ether CA:FE:DE:CA:00:01
