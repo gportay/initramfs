@@ -71,6 +71,8 @@ help::
 
 install-initramfs/%.tgz:
 	@echo "Building package $*..."
+	install -d packages-initramfs/$*/var/lib/pkg/info/
+	cd packages-initramfs/$* && find -type f -print | sed -e 's,^\./,/,' -e "\:.*/\.gitignore:d" -e '\:/var/lib/pkg:d' >var/lib/pkg/info/$(*F).list
 	( cd packages-initramfs/$* && fakeroot -- tar czf ../../$@ --exclude=.gitignore * )
 
 $(tmpdir)/ramfs: $(tgz-y)
