@@ -1,5 +1,17 @@
+tgz-$(CONFIG_MODULES)	+= install-initramfs/modules.tgz
+
 image			?= $(CONFIG_IMAGE)
 IMAGE			?= $(if $(image),$(image),zImage)
+
+packages-initramfs/modules/lib/modules:
+	@echo "Building modules..."
+	make -C linux modules
+
+packages-initramfs/modules/lib: packages-initramfs/modules/lib/modules
+	@echo "Installing modules..."
+	make -C linux modules_install INSTALL_MOD_PATH=$(CURDIR)/$(@D)
+
+install-initramfs/modules.tgz: packages-initramfs/modules/lib
 
 %.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."
@@ -24,6 +36,7 @@ $(IMAGE): linux/arch/$(arch)/boot/$(IMAGE)
 kernel: $(IMAGE)
 
 clean::
+	rm -Rf packages-initramfs/modules/*
 	rm -f $(IMAGE)
 
 reallyclean::
