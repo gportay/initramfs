@@ -211,3 +211,21 @@ config INPUT_EVENTD
 	help
 	  Basic daemon that runs scripts when events happen onto a input-event
 	  device.
+
+menu "Kernel"
+
+config MODULES
+	bool "install modules"
+	default n
+	help
+	  Kernel modules are small pieces of compiled code which can
+	  be inserted in the running kernel, rather than being
+	  permanently built into the kernel.  You use the "modprobe"
+	  tool to add (and sometimes remove) them.  If you say Y here,
+	  many parts of the kernel can be built as modules (by
+	  answering M instead of Y where indicated): this is most
+	  useful for infrequently used options which are not required
+	  for booting.  For more information, see the man pages for
+	  modprobe, lsmod, modinfo, insmod and rmmod.
+
+endmenu
