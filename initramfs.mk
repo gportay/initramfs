@@ -12,17 +12,17 @@ endif
 ifneq (0,${BUSYBOX})
 packages	+= install-initramfs/busybox.tgz
 endif
-include busybox.inc
+include busybox.mk
 
 ifneq (1,${TOYBOX})
 packages	+= install-initramfs/toybox.tgz
 endif
-include toybox.inc
+include toybox.mk
 
 ifeq (1,${INPUT_EVENTD})
 packages	+= install-initramfs/input-eventd.tgz
 endif
-include input-eventd.inc
+include input-eventd.mk
 
 ifneq (0,${PWM_LED})
 packages	+= install-initramfs/led.tgz
@@ -31,7 +31,7 @@ endif
 ifeq (1,${KEXEC_TOOLS})
 packages	+= install-initramfs/kexec-tools.tgz
 endif
-include kexec-tools.inc
+include kexec-tools.mk
 
 ifneq (0,${PROFILE})
 packages	+= install-initramfs/profile.tgz

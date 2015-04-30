@@ -30,7 +30,7 @@ export ARCH = $(arch)
 all:: initramfs.cpio
 
 packages ?= install-initramfs/ramfs.tgz
-PACKAGES += initramfs.inc
+PACKAGES += initramfs.mk
 include $(PACKAGES)
 
 .SILENT:: initramfs.cpio

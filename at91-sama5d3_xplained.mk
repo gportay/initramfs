@@ -1,4 +1,4 @@
-include at91.inc
+include at91.mk
 
 extradir	+= install-at91-sama5d3_xplained
 packages	+= install-at91-sama5d3_xplained/led.tgz
