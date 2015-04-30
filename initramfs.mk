@@ -37,3 +37,4 @@ ifneq (0,${PROFILE})
 packages	+= install-initramfs/profile.tgz
 endif
 
+include linux.inc
