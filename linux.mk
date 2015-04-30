@@ -1,4 +1,5 @@
 tgz-$(CONFIG_MODULES)	+= install-initramfs/modules.tgz
+tgz-$(CONFIG_DTBS)	+= install-initramfs/dtbs.tgz
 
 image			?= $(CONFIG_IMAGE)
 IMAGE			?= $(if $(image),$(image),zImage)
@@ -12,6 +13,20 @@ packages-initramfs/modules/lib: packages-initramfs/modules/lib/modules
 	make -C linux modules_install INSTALL_MOD_PATH=$(CURDIR)/$(@D)
 
 install-initramfs/modules.tgz: packages-initramfs/modules/lib
+
+packages-initramfs/dtbs/boot/dtbs:
+	@echo "Building dtbs..."
+	make -C linux dtbs
+
+packages-initramfs/dtbs/boot: packages-initramfs/dtbs/boot/dtbs
+	@echo "Installing dtbs..."
+	make -C linux dtbs_install INSTALL_DTBS_PATH=$(CURDIR)/$(@D)
+
+install-initramfs/dtbs.tgz: packages-initramfs/dtbs/boot
+
+%.dtbqsdf:
+	@echo "Building $@ arch/$(arch)/boot/dts/$*.dts..."
+	make -C linux dtbs
 
 %.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."
@@ -37,6 +52,7 @@ kernel: $(IMAGE)
 
 clean::
 	rm -Rf packages-initramfs/modules/*
+	rm -Rf packages-initramfs/dtbs/*
 	rm -f $(IMAGE)
 
 reallyclean::

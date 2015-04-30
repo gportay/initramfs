@@ -228,4 +228,9 @@ config MODULES
 	  for booting.  For more information, see the man pages for
 	  modprobe, lsmod, modinfo, insmod and rmmod.
 
+config DTBS
+	bool "install dtbs"
+	default n
+	help
+
 endmenu
