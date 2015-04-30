@@ -22,7 +22,6 @@ host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
 endif
 
-LINUXDIR	?= linux
 IMAGE		?= zImage
 arch		?= $(shell uname -m)
 export ARCH = $(arch)
@@ -51,24 +50,25 @@ initramfs.cpio: $(packages)
 	( cd $(tmpdir)/ramfs/ && find . | cpio -H newc -o >../$@ ) && cp $(tmpdir)/$@ .
 	rm -Rf $(tmpdir)
 
-%.dtb: $(LINUXDIR)/arch/$(arch)/boot/dts/%.dts
+%.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."
-	make -C $(LINUXDIR) $@
-	cp $(LINUXDIR)/arch/$(arch)/boot/dts/$@ .
+	make -C linux $@
+	cp linux/arch/$(arch)/boot/dts/$@ .
 
-$(LINUXDIR)_%s:
-	make -C $(LINUXDIR) $*
+linux_%s:
+	make -C linux $*
 
-$(LINUXDIR)/.config:
-	@echo "Configuring kernel for $(ARCH) using $(LINUX_DEFCONFIG)..."
-	if test -e $(LINUX_DEFCONFIG); then cp $(LINUX_DEFCONFIG) $(LINUXDIR)/.config; else make -C $(LINUXDIR) $(LINUX_DEFCONFIG); fi
+linux/.config:
+	@echo "You need to provide your own kernel sources into the ./linux directory!"
+	@echo "Have a look at https://www.kernel.org!"
+	@exit 1
 
-$(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio $(LINUXDIR)/.config
+linux/arch/$(arch)/boot/$(IMAGE): initramfs.cpio linux/.config
 	@echo "Building $(IMAGE) for $(ARCH)..."
-	make -C $(LINUXDIR) $(@F) CONFIG_INITRAMFS_SOURCE=../$<
+	make -C linux $(@F) CONFIG_INITRAMFS_SOURCE=../$<
 
-$(IMAGE): $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE)
-	cp $(LINUXDIR)/arch/$(arch)/boot/$@ $@
+$(IMAGE): linux/arch/$(arch)/boot/$(IMAGE)
+	cp linux/arch/$(arch)/boot/$@ $@
 
 kernel: $(IMAGE)
 
