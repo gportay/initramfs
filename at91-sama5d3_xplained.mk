@@ -15,6 +15,6 @@ endif
 
 install-at91-sama5d3_xplained/%.tgz:
 	@echo "Building package $*..."
-	install -d ${@D}
+	install -d $(@D)
 	( cd packages-at91-sama5d3_xplained/$* && tar czf ../../$@ --exclude=.gitignore * )
 

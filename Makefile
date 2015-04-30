@@ -65,7 +65,7 @@ $(LINUXDIR)/.config:
 
 $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE): initramfs.cpio $(LINUXDIR)/.config
 	@echo "Building $(IMAGE) for $(ARCH)..."
-	make -C $(LINUXDIR) ${@F} CONFIG_INITRAMFS_SOURCE=../$<
+	make -C $(LINUXDIR) $(@F) CONFIG_INITRAMFS_SOURCE=../$<
 
 $(IMAGE): $(LINUXDIR)/arch/$(arch)/boot/$(IMAGE)
 	cp $(LINUXDIR)/arch/$(arch)/boot/$@ $@
