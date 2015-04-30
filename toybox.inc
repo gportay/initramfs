@@ -3,16 +3,16 @@
 toybox:: toybox/toybox
 
 toybox/.config: toybox_defconfig
-	@echo -e "\e[1mConfiguring toybox...\e[0m"
+	@echo "Configuring toybox..."
 	cp $< $@
 	yes "" | make -C toybox oldconfig
 
 toybox/toybox: toybox/.config
-	@echo -e "\e[1mCompiling toybox...\e[0m"
+	@echo "Compiling toybox..."
 	make -C toybox
 
 packages-initramfs/toybox/bin/toybox: toybox/toybox
-	@echo -e "\e[1mInstalling toybox...\e[0m"
+	@echo "Installing toybox..."
 	make -C toybox install PREFIX=$(CURDIR)/packages-initramfs/toybox
 
 install-initramfs/toybox.tgz: packages-initramfs/toybox/bin/toybox

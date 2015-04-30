@@ -1,9 +1,9 @@
 input-eventd/input-eventd: input-eventd/input-eventd.c
-	@echo -e "\e[1mCompiling input-eventd...\e[0m"
+	@echo "Compiling input-eventd..."
 	make -C input-eventd input-eventd
 
 packages-initramfs/input-eventd/usr/sbin/input-eventd: input-eventd/input-eventd input-eventd/input-event.action input-eventd/log.script input-eventd/input-eventd.init input-eventd/dev-input-event.init
-	@echo -e "\e[1mInstalling input-eventd...\e[0m"
+	@echo "Installing input-eventd..."
 	install -d $(@D)
 	install -m 755 $< $@
 	install -d packages-initramfs/input-eventd/usr/share/input-eventd/

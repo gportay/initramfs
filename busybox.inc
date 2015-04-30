@@ -3,16 +3,16 @@
 busybox:: busybox/busybox
 
 busybox/.config: busybox_defconfig
-	@echo -e "\e[1mConfiguring busybox...\e[0m"
+	@echo "Configuring busybox..."
 	cp $< $@
 	yes "" | make -C busybox oldconfig
 
 busybox/busybox: busybox/.config
-	@echo -e "\e[1mCompiling busybox...\e[0m"
+	@echo "Compiling busybox..."
 	make -C busybox
 
 packages-initramfs/busybox/bin/busybox: busybox/busybox
-	@echo -e "\e[1mInstalling busybox...\e[0m"
+	@echo "Installing busybox..."
 	make -C busybox install CONFIG_PREFIX=$(CURDIR)/packages-initramfs/busybox
 
 install-initramfs/busybox.tgz: packages-initramfs/busybox/bin/busybox

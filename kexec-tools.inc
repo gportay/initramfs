@@ -3,16 +3,16 @@
 kexec-tools:: kexec-tools/build/sbin/kexec
 
 kexec-tools/Makefile: kexec-tools/configure
-	@echo -e "\e[1mConfiguring kexec-tools...\e[0m"
+	@echo "Configuring kexec-tools..."
 	( cd kexec-tools && ./configure --prefix=$(prefix) --host=$(host) )
 
 kexec-tools/build/sbin/kexec: kexec-tools/Makefile
-	@echo -e "\e[1mCompiling kexec-tools...\e[0m"
+	@echo "Compiling kexec-tools..."
 	make -C kexec-tools
 	touch $@
 
 packages-initramfs/kexec-tools/usr/sbin/kexec: kexec-tools/build/sbin/kexec
-	@echo -e "\e[1mInstalling kexec-tools...\e[0m"
+	@echo "Installing kexec-tools..."
 	make -C kexec-tools install DESTDIR=$(CURDIR)/packages-initramfs/kexec-tools
 	$(CROSS_COMPILE)strip -s $@
 	rm packages-initramfs/kexec-tools/usr/sbin/kdump packages-initramfs/kexec-tools/usr/sbin/vmcore-dmesg

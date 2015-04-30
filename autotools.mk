@@ -1,4 +1,4 @@
 %/configure: %/configure.ac
-	@echo -e "\e[1mAutoConfiguring $(@D)...\e[0m"
+	@echo "AutoConfiguring $(@D)..."
 	( cd $(@D) && autoreconf -vif )
 
