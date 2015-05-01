@@ -28,7 +28,11 @@ IMAGE		?= zImage
 arch		?= $(shell uname -m)
 export ARCH = $(arch)
 
+ifeq ($(CONFIG_HAVE_DOT_CONFIG),y)
 all:: initramfs.cpio
+else
+all:: silentoldconfig
+endif
 
 tgz-y		?= install-initramfs/ramfs.tgz
 include initramfs.mk

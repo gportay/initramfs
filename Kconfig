@@ -4,6 +4,12 @@
 #
 mainmenu "InitRAMFS Configuration"
 
+config HAVE_DOT_CONFIG
+	bool
+	default y
+	help
+	  Hook to menuconfig project if not yet configured!
+
 config CROSS_COMPILE
 	string "Cross-compiler tool prefix"
 	help
