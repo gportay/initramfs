@@ -9,9 +9,9 @@ else
 Kconfig := Kconfig
 endif
 
-include kconfig-frontends.mk
-
 obj := bin
+
+include kconfig-frontends.mk
 
 menuconfig: $(obj)/mconf
 	$< $(Kconfig)
