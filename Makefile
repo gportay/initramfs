@@ -59,14 +59,18 @@ $(tmpdir)/ramfs/dev/console:
 
 initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
 
-initrd.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
+initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
 
 %.cpio:
 	cd $< && find . | cpio -H newc -o >$(CURDIR)/$@
 	rm -Rf $<
 
+%.squashfs:
+	mksquashfs $< $@ -all-root
+	rm -Rf $<
+
 clean::
-	rm -f install-*/*.tgz initramfs.cpio initrd.cpio
+	rm -f install-*/*.tgz initramfs.cpio initrd.cpio initrd.squashfs
 
 reallyclean:: clean
 
