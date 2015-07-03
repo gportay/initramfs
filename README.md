@@ -28,3 +28,9 @@ Your are now ready to build an *initramfs* image...
     $ make initrd.cpio
     $ make initrd.squashfs
 Enjoy!
+
+---
+**PS**: Do no forget to run...
+
+    $ make help
+... to check for what you can do with the [Makefile](https://raw.githubusercontent.com/gazoo74/initramfs/master/Makefile)!
