@@ -45,20 +45,28 @@ $(tmpdir)/ramfs: $(packages)
 	install -d $@
 	for dir in install-initramfs $(extradir); do find $$dir/ -name "*.tgz" -exec tar xzf {} -C $@ \;; done
 
-$(tmpdir)/ramfs/init:
+$(tmpdir)/ramfs/init $(tmpdir)/ramfs/linuxrc:
 	ln -sf etc/init $@
+
+$(tmpdir)/ramfs/initrd:
+	install -d $@
+
+$(tmpdir)/ramfs/dev/initrd:
+	fakeroot -- mknod -m 400 $@ b 1 250
 
 $(tmpdir)/ramfs/dev/console:
 	fakeroot -- mknod -m 622 $@ c 5 1
 
 initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
 
+initrd.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
+
 %.cpio:
 	cd $< && find . | cpio -H newc -o >$(CURDIR)/$@
 	rm -Rf $<
 
 clean::
-	rm -f install-*/*.tgz initramfs.cpio
+	rm -f install-*/*.tgz initramfs.cpio initrd.cpio
 
 reallyclean:: clean
 
