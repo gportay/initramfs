@@ -11,17 +11,17 @@ linux/.config:
 	@echo "Have a look at https://www.kernel.org!"
 	@exit 1
 
-linux/arch/$(arch)/boot/$(IMAGE): initramfs.cpio linux/.config
-	@echo "Building $(IMAGE) for $(ARCH)..."
+linux/arch/$(arch)/boot/$(KIMAGE): initramfs.cpio linux/.config
+	@echo "Building $(KIMAGE) for $(ARCH)..."
 	make -C linux $(@F) CONFIG_INITRAMFS_SOURCE=../$<
 
-$(IMAGE): linux/arch/$(arch)/boot/$(IMAGE)
+$(KIMAGE): linux/arch/$(arch)/boot/$(KIMAGE)
 	cp linux/arch/$(arch)/boot/$@ $@
 
-kernel: $(IMAGE)
+kernel: $(KIMAGE)
 
 clean::
-	rm -f $(IMAGE)
+	rm -f $(KIMAGE)
 
 mrproper::
 	rm -f *Image *.dtb
