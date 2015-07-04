@@ -22,7 +22,6 @@ host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
 endif
 
-KIMAGE		?= zImage
 arch		?= $(shell uname -m)
 export ARCH = $(arch)
 

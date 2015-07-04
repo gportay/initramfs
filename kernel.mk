@@ -1,3 +1,5 @@
+KIMAGE		?= zImage
+
 %.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."
 	make -C linux $@
