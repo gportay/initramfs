@@ -43,4 +43,4 @@ reallyclean::
 	-make -f Makefile toybox_clean
 
 mrpoper::
-	-make -f Makefile toybox_cleanall
+	-make -f Makefile toybox_distclean
