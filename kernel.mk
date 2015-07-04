@@ -3,7 +3,7 @@
 	make -C linux $@
 	cp linux/arch/$(arch)/boot/dts/$@ .
 
-linux_%s:
+linux_%:
 	make -C linux $*
 
 linux/.config:
