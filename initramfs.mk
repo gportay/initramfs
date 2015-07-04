@@ -14,7 +14,7 @@ packages	+= install-initramfs/busybox.tgz
 endif
 include busybox.mk
 
-ifneq (1,${TOYBOX})
+ifeq (1,${TOYBOX})
 packages	+= install-initramfs/toybox.tgz
 endif
 include toybox.mk
