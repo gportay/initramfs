@@ -9,7 +9,7 @@ toybox/.config: toybox_defconfig
 
 toybox/toybox: toybox/.config
 	@echo "Compiling toybox..."
-	make -C toybox
+	make -C toybox CFLAGS="--static"
 
 packages-initramfs/toybox/bin/toybox: toybox/toybox
 	@echo "Installing toybox..."
