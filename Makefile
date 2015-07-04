@@ -3,6 +3,7 @@ PATCHLEVEL	 = 0
 SUBLEVEL	 = 0
 EXTRAVERSION	 = .1
 NAME		 = I am Charlie
+RELEASE		 = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
 
 all::
 
@@ -31,9 +32,12 @@ packages ?= install-initramfs/ramfs.tgz
 PACKAGES += initramfs.mk
 include $(PACKAGES)
 
-.SILENT:: initramfs.cpio
+.SILENT:: initramfs.cpio version
 
 .PHONY:: all clean
+
+version:
+	echo "$(RELEASE)"
 
 install-initramfs/%.tgz:
 	@echo "Building package $*..."
