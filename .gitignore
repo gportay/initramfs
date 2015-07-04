@@ -4,3 +4,4 @@ packages-initramfs/busybox/
 packages-initramfs/toybox/
 packages-initramfs/input-event.d/
 packages-initramfs/kexec-tools/
+linux*/
