@@ -32,12 +32,29 @@ packages ?= install-initramfs/ramfs.tgz
 PACKAGES += initramfs.mk
 include $(PACKAGES)
 
-.SILENT:: initramfs.cpio version
+.SILENT:: initramfs.cpio version help
 
 .PHONY:: all clean
 
 version:
 	echo "$(RELEASE)"
+
+help::
+	echo -e "\$$ make version\t\t\t\tto display version."
+	echo -e "\$$ make help\t\t\t\tto display this message."
+	echo -e "\$$ make [initramfs.cpio]\t\t\tto build an Initial RAMFS archive."
+	echo -e "\$$ make initrd.cpio\t\t\tto build an Initial RAM-Disk archive."
+	echo -e "\$$ make initrd.squashfs\t\t\tto build an Initial RAM-Disk SquashFS image."
+	echo -e "\$$ make kernel [KIMAGE=zImage]\t\tto build a kernel image with its appended initramfs."
+	echo -e "\$$ make dtb|dtbs\t\t\t\tto build a dtb or all dbts images."
+	echo -e "\$$ make kernel|linux_xxx\t\t\tto run linux kernel xxx rule."
+	echo -e "\$$ make clean\t\t\t\tto clean workspace from outputs."
+	echo -e "\$$ make reallyclean\t\t\tto clean workspace from all package outputs."
+	echo -e "\$$ make mrproper\t\t\t\tto clean workspace from everything."
+	echo -e ""
+	echo -e "Extra variables:"
+	echo -e "CROSS_COMPILE:                          Sets the cross-compiler (packages)."
+	echo -e "KIMAGE:                                 Set kernel image type (kernel)."
 
 install-initramfs/%.tgz:
 	@echo "Building package $*..."
