@@ -83,11 +83,11 @@ initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ra
 
 %.cpio:
 	cd $< && find . | cpio -H newc -o >$(CURDIR)/$@
-	rm -Rf $<
+	rm -Rf $(<D)
 
 %.squashfs:
 	mksquashfs $< $@ -all-root
-	rm -Rf $<
+	rm -Rf $(<D)
 
 clean::
 	rm -f install-*/*.tgz initramfs.cpio initrd.cpio initrd.squashfs
