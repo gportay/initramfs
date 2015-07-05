@@ -4,7 +4,7 @@ kexec-tools:: kexec-tools/build/sbin/kexec
 
 kexec-tools/Makefile: kexec-tools/configure
 	@echo "Configuring kexec-tools..."
-	( cd kexec-tools && ./configure --prefix=$(prefix) --host=$(host) )
+	( cd kexec-tools && ./configure --prefix=$(prefix) --host=$(host) LDFLAGS=-static )
 
 kexec-tools/build/sbin/kexec: kexec-tools/Makefile
 	@echo "Compiling kexec-tools..."
