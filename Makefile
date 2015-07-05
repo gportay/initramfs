@@ -81,7 +81,7 @@ initramfs.cpio.gz initrd.cpio.gz:
 
 initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
 
-initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
+initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/linuxrc $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
 
 %.cpio:
 	cd $< && find . | cpio -H newc -o >$(CURDIR)/$@
