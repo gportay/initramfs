@@ -8,6 +8,8 @@ KIMAGE		?= zImage
 kernel_% linux_%:
 	make -C linux $*
 
+kernel_menuconfig linux_menuconfig:
+
 linux/.config:
 	@echo "You need to provide your own kernel sources into the ./linux directory!"
 	@echo "Have a look at https://www.kernel.org!"

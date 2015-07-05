@@ -22,6 +22,8 @@ toybox_%::
 
 toybox:: toybox_all
 
+toybox_menuconfig:
+
 toybox_configure:
 	make -f Makefile toybox/.config
 

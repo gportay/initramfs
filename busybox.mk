@@ -22,6 +22,8 @@ busybox_%::
 
 busybox:: busybox_all
 
+busybox_menuconfig:
+
 busybox_configure:
 	make -f Makefile busybox/.config
 
