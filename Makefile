@@ -77,6 +77,8 @@ $(tmpdir)/ramfs/dev/initrd:
 $(tmpdir)/ramfs/dev/console:
 	fakeroot -- mknod -m 622 $@ c 5 1
 
+initramfs.cpio.gz initrd.cpio.gz:
+
 initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
 
 initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
@@ -88,6 +90,9 @@ initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/initrd $(tmpdir)/ra
 %.squashfs:
 	mksquashfs $< $@ -all-root
 	rm -Rf $(<D)
+
+%.gz: %
+	gzip -9 $*
 
 clean::
 	rm -f install-*/*.tgz initramfs.cpio initrd.cpio initrd.squashfs
