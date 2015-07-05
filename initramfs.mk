@@ -28,7 +28,7 @@ ifneq (0,${PWM_LED})
 packages	+= install-initramfs/led.tgz
 endif
 
-ifeq (1,${KEXEC_TOOLS})
+ifneq (0,${KEXEC_TOOLS})
 packages	+= install-initramfs/kexec-tools.tgz
 endif
 include kexec-tools.mk
