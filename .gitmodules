@@ -6,4 +6,4 @@
 	url = git://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git
 [submodule "toybox"]
 	path = toybox
-	url = git@github.com:gfto/toybox.git
+	url = git@github.com:landley/toybox.git
