@@ -7,3 +7,6 @@
 [submodule "toybox"]
 	path = toybox
 	url = git@github.com:landley/toybox.git
+[submodule "kconfig-frontends"]
+	path = kconfig-frontends
+	url = git://ymorin.is-a-geek.org/kconfig-frontends

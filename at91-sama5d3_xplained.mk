@@ -3,15 +3,12 @@ include at91.mk
 extradir	+= install-at91-sama5d3_xplained
 packages	+= install-at91-sama5d3_xplained/led.tgz
 
-ifneq (0,${RC_LOCAL})
-ifneq (0,${NETWORKING})
-packages	+= install-at91-sama5d3_xplained/networking.tgz
-endif
+ifeq (y,$(CONFIG_RC_LOCAL))
+tgz-$(CONFIG_NETWORKING)	+= install-at91-sama5d3_xplained/networking.tgz
 endif
 
-ifneq (0,${OVERLAY})
-packages	+= install-at91/persistant.tgz install-initramfs/overlay.tgz
-endif
+tgz-$(CONFIG_OVERLAY_FS)	+= install-at91/persistant.tgz
+tgz-$(CONFIG_OVERLAY_FS)	+= install-initramfs/overlay.tgz
 
 install-at91-sama5d3_xplained/%.tgz:
 	@echo "Building package $*..."
