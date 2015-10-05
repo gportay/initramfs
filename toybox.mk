@@ -44,5 +44,5 @@ toybox_cleanall:
 reallyclean::
 	-make -f Makefile toybox_clean
 
-mrpoper::
+mrproper::
 	-make -f Makefile toybox_distclean

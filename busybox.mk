@@ -44,5 +44,5 @@ busybox_cleanall:
 reallyclean::
 	-make -f Makefile busybox_clean
 
-mrpoper::
+mrproper::
 	-make -f Makefile busybox_cleanall
