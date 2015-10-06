@@ -1,4 +1,5 @@
-KIMAGE		?= zImage
+kimage		?= $(CONFIG_IMAGE)
+KIMAGE		?= $(if $(kimage),$(kimage),zImage)
 
 %.dtb: linux/arch/$(arch)/boot/dts/%.dts
 	@echo "Building $@ for $(ARCH)..."

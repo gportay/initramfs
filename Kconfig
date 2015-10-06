@@ -1,0 +1,177 @@
+#
+# For a description of the syntax of this configuration file,
+# see ./share/doc/kconfig-frontends/kconfig-language.txt.
+#
+mainmenu "InitRAMFS Configuration"
+
+config HAVE_DOT_CONFIG
+	bool
+	default y
+	help
+	  Hook to menuconfig project if not yet configured!
+
+config CROSS_COMPILE
+	string "Cross-compiler tool prefix"
+	help
+	  Same as running 'make CROSS_COMPILE=prefix-' but stored for
+	  default make runs in this initramfs build directory.  You don't
+	  need to set this unless you want the configured initramfs build
+	  directory to select the cross-compiler automatically.
+
+menu "Core-Utils"
+
+choice
+	prompt "Core-Utils"
+	default COREUTILS_BUSYBOX
+
+config COREUTILS_BUSYBOX
+	bool "Busybox - The Swiss Army Knife of Embedded Linux"
+	select BUSYBOX
+
+config COREUTILS_TOYBOX
+	bool "Toybox - An alternative to Busybox"
+	select TOYBOX
+
+endchoice
+
+config BUSYBOX
+	bool "Busybox - The Swiss Army Knife of Embedded Linux"
+	default n
+	help
+	  BusyBox combines tiny versions of many common UNIX utilities into a
+	  single small executable. It provides replacements for most of the
+	  utilities you usually find in GNU fileutils, shellutils, etc.
+	  The utilities in BusyBox generally have fewer options than their
+	  full-featured GNU cousins; however, the options that are included
+	  provide the expected functionality and behave very much like their
+	  GNU counterparts. BusyBox provides a fairly complete environment for
+	  any small or embedded system.
+
+	  BusyBox has been written with size-optimization and limited resources
+	  in mind. It is also extremely modular so you can easily include or
+	  exclude commands (or features) at compile time. This makes it easy to
+	  customize your embedded systems. To create a working system, just add
+	  some device nodes in /dev, a few configuration files in /etc, and a
+	  Linux kernel.
+
+	  BusyBox is maintained by Denys Vlasenko, and licensed under the GNU
+	  GENERAL PUBLIC LICENSE version 2.
+
+config BUSYBOX_PREFIX
+	string "Busybox - The Swiss Army Knife of Embedded Linux"
+	depends on BUSYBOX && !COREUTILS_BUSYBOX
+	default "/opt/busybox" if COREUTILS_TOYBOX
+	help
+	  Where to install if it is not the default core-utils.
+
+config TOYBOX
+	bool "Toybox - An alternative to Busybox"
+	help
+	  Toybox combines common Linux command line utilities together into a
+	  single BSD-licensed executable that's simple, small, fast, reasonably
+	  standards-compliant, and powerful enough to turn Android into a
+	  development environment.
+
+	  Toybox's 1.0 release goal is to turn generic Android into a
+	  development environment capable of compiling Linux From Scratch.
+	  A tiny system built from just toybox, linux, a C library, and a C
+	  compiler (such as LLVM or gcc 4.2.1+binutils 2.17) should be able to
+	  rebuild itself from source code without needing any other packages.
+
+config TOYBOX_PREFIX
+	string "Toybox - An alternative to Busybox"
+	depends on TOYBOX && !COREUTILS_TOYBOX
+	default "/opt/toybox" if COREUTILS_BUSYBOX
+	help
+	  Where to install if it is not the default core-utils.
+
+endmenu
+
+config RC_LOCAL
+	bool "rc.local - customize startup"
+	default y
+	help
+	  rc.local is run by init process after it sets up user-space to make
+	  it ready for any *nix tasks. It becomes the new first PID.
+
+	  rc.local sets up an oops handle that opens a login in case of
+	  initialization failure. It starts all sysvinit-like script contained
+	  in the /usr/share/rc.local/$compatible.d directory.
+
+	  The list of compatible platforms is extract from device-tree.
+
+config NETWORKING
+	bool "Networking - home-made scripts"
+	default y
+	help
+	  This option allows InitRAMFS to have support for networking script.
+	  Combined to rc.local, it will setup network at start-up.
+	  $ /etc/init.d/networking start [IFACE=eth0]
+
+config INET
+	bool "inet - Internet Superserver"
+	default y
+	depends on NETWORKING
+	help
+	  Internet superserver daemon
+
+config PROFILE
+	bool ".profile support"
+	default y
+	help
+	  Enable options and features which are not essential.
+	  Select this only if you plan to use busybox on full-blown
+	  desktop machine with common Linux distro, not on an embedded box.
+
+config OVERLAY_FS
+	bool "Overlay FS support"
+	default y
+	help
+	  An overlay filesystem combines two filesystems - an 'upper' filesystem
+	  and a 'lower' filesystem.  When a name exists in both filesystems, the
+	  object in the 'upper' filesystem is visible while the object in the
+	  'lower' filesystem is either hidden or, in the case of directories,
+	  merged with the 'upper' object.
+
+	  For more information see Documentation/filesystems/overlayfs.txt
+
+config OVERLAY_ROOTFS
+	bool "Overlay volatile rootfs with persistent filesystem"
+	depends on OVERLAY_FS
+	default y
+	help
+	  Overlay the volatile rootfs (ramfs) with a persistent filesystem.
+	  The rootfs is the lower filesystem while the persistent one is the
+	  upper.
+
+	  Installs a new tiny-init script between the kernel and the
+	  "should-called" init. This intermediate script sets up the overlay
+	  before it steps down in favour of the real-init (the one that should
+	  have been called first). The handover is performed via chroot.
+
+	  This covers the drawback of having a volatile rootfs if at least your
+	  are not touching to what is run before the overlay setup like the
+	  overlay init, the core-utils...
+
+config KEXEC_TOOLS
+	bool "kexec-tools - directly boot into a new kernel"
+	default n
+	help
+	  kexec is a system call that enables you to load and boot into another
+	  kernel from the currently running kernel. kexec performs the function
+	  of the boot loader from within the kernel.
+	  The primary difference between a standard system boot and a kexec
+	  boot is that the hardware initialization normally performed by the
+	  BIOS or firmware (depending on architecture) is not performed during
+	  a kexec boot. This has the effect of reducing the time required for a
+	  reboot.
+
+	  Make sure you have selected CONFIG_KEXEC=y when configuring the
+	  kernel. The CONFIG_KEXEC option enables the kexec system call.
+
+config INPUT_EVENTD
+	bool "input-eventd - basic daemon for input-event devices"
+	default y
+	help
+	  Basic daemon that runs scripts when events happen onto a input-event
+	  device.

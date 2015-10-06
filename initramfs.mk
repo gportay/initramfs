@@ -1,40 +1,15 @@
-ifneq (0,${RC_LOCAL})
-packages	+= install-initramfs/rc.local.tgz
-endif
+tgz-$(CONFIG_RC_LOCAL)		+= install-initramfs/rc.local.tgz
+tgz-$(CONFIG_NETWORKING)	+= install-initramfs/networking.tgz
+tgz-$(CONFIG_INET)		+= install-initramfs/inetd.tgz
+tgz-$(CONFIG_BUSYBOX)		+= install-initramfs/busybox.tgz
+tgz-$(CONFIG_TOYBOX)		+= install-initramfs/toybox.tgz
+tgz-$(CONFIG_INPUT_EVENTD)	+= install-initramfs/input-eventd.tgz
+tgz-$(CONFIG_PWM_LED)		+= install-initramfs/led.tgz
+tgz-$(CONFIG_KEXEC_TOOLS)	+= install-initramfs/kexec-tools.tgz
+tgz-$(CONFIG_PROFILE)		+= install-initramfs/profile.tgz
 
-ifneq (0,${NETWORKING})
-packages	+= install-initramfs/networking.tgz
-ifneq (0,${INET})
-packages	+= install-initramfs/inetd.tgz
-endif
-endif
-
-ifneq (0,${BUSYBOX})
-packages	+= install-initramfs/busybox.tgz
-endif
 include busybox.mk
-
-ifeq (1,${TOYBOX})
-packages	+= install-initramfs/toybox.tgz
-endif
 include toybox.mk
-
-ifeq (1,${INPUT_EVENTD})
-packages	+= install-initramfs/input-eventd.tgz
-endif
 include input-eventd.mk
-
-ifneq (0,${PWM_LED})
-packages	+= install-initramfs/led.tgz
-endif
-
-ifneq (0,${KEXEC_TOOLS})
-packages	+= install-initramfs/kexec-tools.tgz
-endif
 include kexec-tools.mk
-
-ifneq (0,${PROFILE})
-packages	+= install-initramfs/profile.tgz
-endif
-
 include kernel.mk
