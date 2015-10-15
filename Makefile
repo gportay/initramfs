@@ -89,7 +89,7 @@ initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
 initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/linuxrc $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
 
 %.cpio:
-	cd $< && find . | cpio -H newc -o >$(CURDIR)/$@
+	cd $< && find . | cpio -H newc -o -R root:root >$(CURDIR)/$@
 	rm -Rf $(<D)
 
 %.squashfs:
