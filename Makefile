@@ -19,7 +19,7 @@ prefix := $(PREFIX)
 
 export LDFLAGS ?= -static
 CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
-ifdef CROSS_COMPILE
+ifneq (,$(CROSS_COMPILE))
 CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
