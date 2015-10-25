@@ -38,7 +38,7 @@ $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
 	make -C linux O=$(CURDIR)/$(KOUTPUT) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/$< $(@F)
 
 $(KIMAGE): $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
-	cp $(KOUTPUT)/arch/$(karch)/boot/$@ $@
+	cp $< $@
 
 kernel: $(KIMAGE)
 
