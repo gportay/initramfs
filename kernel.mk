@@ -1,13 +1,16 @@
+OUTPUTDIR	?= output
+
 kimage		?= $(CONFIG_IMAGE)
 KIMAGE		?= $(if $(kimage),$(kimage),zImage)
+KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 
-%.dtb: linux/arch/$(karch)/boot/dts/%.dts
+%.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dts
 	@echo "Building $@ for $(karch)..."
-	make -C linux $@
-	cp linux/arch/$(karch)/boot/dts/$@ .
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
+	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
 
 kernel_% linux_%:
-	make -C linux $*
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $*
 
 kernel_menuconfig linux_menuconfig:
 
@@ -22,25 +25,29 @@ linux/Makefile:
 	@echo "$$ make $(@D)_download" >&2
 	@exit 1
 
-linux/.config: linux/Makefile
+$(KOUTPUT)/.config: linux/Makefile
 	@echo "You need to configure your kernel using a defconfig file!" >&2
 	@echo "Run one of the commands below:" >&2
-	@echo "$$ make -C $(@D) ARCH=$(karch) menuconfig" >&2
+	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) menuconfig" >&2
 	@echo "or" >&2
-	@echo "$$ make -C $(@D) ARCH=$(karch) tinyconfig" >&2
+	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) tinyconfig" >&2
 	@exit 1
 
-linux/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio linux/.config
+$(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
 	@echo "Building $(KIMAGE) for $(karch)..."
-	make -C linux $(@F) CONFIG_INITRAMFS_SOURCE=../$<
+	make -C linux O=$(CURDIR)/$(KOUTPUT) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/$< $(@F)
 
-$(KIMAGE): linux/arch/$(karch)/boot/$(KIMAGE)
-	cp linux/arch/$(karch)/boot/$@ $@
+$(KIMAGE): $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
+	cp $(KOUTPUT)/arch/$(karch)/boot/$@ $@
 
 kernel: $(KIMAGE)
 
 clean::
 	rm -f $(KIMAGE)
 
+cleanall::
+	rm -rf $(KOUTPUT)/
+
 mrproper::
 	rm -f *Image *.dtb
+	rm -rf $(OUTPUTDIR)/linux-*/
