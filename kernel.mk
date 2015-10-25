@@ -24,8 +24,10 @@ linux/Makefile:
 
 linux/.config: linux/Makefile
 	@echo "You need to configure your kernel using a defconfig file!" >&2
-	@echo "Run the command below:" >&2
+	@echo "Run one of the commands below:" >&2
 	@echo "$$ make -C $(@D) ARCH=$(karch) menuconfig" >&2
+	@echo "or" >&2
+	@echo "$$ make -C $(@D) ARCH=$(karch) tinyconfig" >&2
 	@exit 1
 
 linux/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio linux/.config
