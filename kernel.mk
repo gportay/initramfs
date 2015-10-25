@@ -1,10 +1,10 @@
 kimage		?= $(CONFIG_IMAGE)
 KIMAGE		?= $(if $(kimage),$(kimage),zImage)
 
-%.dtb: linux/arch/$(arch)/boot/dts/%.dts
-	@echo "Building $@ for $(ARCH)..."
+%.dtb: linux/arch/$(karch)/boot/dts/%.dts
+	@echo "Building $@ for $(karch)..."
 	make -C linux $@
-	cp linux/arch/$(arch)/boot/dts/$@ .
+	cp linux/arch/$(karch)/boot/dts/$@ .
 
 kernel_% linux_%:
 	make -C linux $*
@@ -16,12 +16,12 @@ linux/.config:
 	@echo "Have a look at https://www.kernel.org!"
 	@exit 1
 
-linux/arch/$(arch)/boot/$(KIMAGE): initramfs.cpio linux/.config
-	@echo "Building $(KIMAGE) for $(ARCH)..."
+linux/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio linux/.config
+	@echo "Building $(KIMAGE) for $(karch)..."
 	make -C linux $(@F) CONFIG_INITRAMFS_SOURCE=../$<
 
-$(KIMAGE): linux/arch/$(arch)/boot/$(KIMAGE)
-	cp linux/arch/$(arch)/boot/$@ $@
+$(KIMAGE): linux/arch/$(karch)/boot/$(KIMAGE)
+	cp linux/arch/$(karch)/boot/$@ $@
 
 kernel: $(KIMAGE)
 
