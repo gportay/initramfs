@@ -11,9 +11,13 @@ kernel_% linux_%:
 
 kernel_menuconfig linux_menuconfig:
 
-linux/.config:
+linux/Makefile:
 	@echo "You need to provide your own kernel sources into the ./linux directory!"
 	@echo "Have a look at https://www.kernel.org!"
+	@exit 1
+
+linux/.config: linux/Makefile
+	@echo "You need to configure your kernel using a defconfig file!"
 	@exit 1
 
 linux/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio linux/.config
