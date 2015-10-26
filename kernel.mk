@@ -9,14 +9,6 @@ KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
 	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
 
-kernel_% linux_%:
-	make -C linux O=$(CURDIR)/$(KOUTPUT) $*
-
-kernel_menuconfig linux_menuconfig:
-
-kernel_download linux_download:
-	wget -qO- https://www.kernel.org/index.html | sed -n '/<td id="latest_link"/,/<\/td>/s,.*<a.*href="\(.*\)">\(.*\)</a>.*,wget -qO- \1 | tar xvJ \&\& ln -sf linux-\2 linux,p' | sh
-
 linux/Makefile:
 	@echo "You need to provide your own kernel sources into the $(CURDIR)/$(@D) directory!" >&2
 	@echo "Have a look at https://www.kernel.org! or run one of the commands below:" >&2
@@ -41,6 +33,15 @@ $(KIMAGE): $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
 	cp $< $@
 
 kernel: $(KIMAGE)
+
+kernel_% linux_%:
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $*
+
+kernel_menuconfig linux_menuconfig:
+
+kernel_download linux_download:
+	wget -qO- https://www.kernel.org/index.html | sed -n '/<td id="latest_link"/,/<\/td>/s,.*<a.*href="\(.*\)">\(.*\)</a>.*,wget -qO- \1 | tar xvJ \&\& ln -sf linux-\2 linux,p' | sh
+
 
 clean::
 	rm -f $(KIMAGE)
