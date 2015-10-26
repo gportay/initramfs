@@ -20,10 +20,12 @@ $(KOUTPUT)/.config: linux/Makefile
 	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) tinyconfig" >&2
 	@exit 1
 
+ifneq (,$(findstring $(karch),arc arm arm64 c6x h8300 metag microblaze nios2 openrisc powerpc sparc))
 %.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dts
 	@echo "Compiling linux ($(@F))..."
 	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
 	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
+endif
 
 $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
 	@echo "Compiling linux ($(@F))..."
