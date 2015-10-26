@@ -5,7 +5,7 @@ KIMAGE		?= $(if $(kimage),$(kimage),zImage)
 KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 
 %.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dts
-	@echo "Building $@ for $(karch)..."
+	@echo "Compiling linux ($(@F))..."
 	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
 	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
 
@@ -26,7 +26,7 @@ $(KOUTPUT)/.config: linux/Makefile
 	@exit 1
 
 $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
-	@echo "Building $(KIMAGE) for $(karch)..."
+	@echo "Compiling linux ($(@F))..."
 	make -C linux O=$(CURDIR)/$(KOUTPUT) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/$< $(@F)
 
 $(KIMAGE): $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
