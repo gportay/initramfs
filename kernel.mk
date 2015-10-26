@@ -25,6 +25,8 @@ ifneq (,$(findstring $(karch),arc arm arm64 c6x h8300 metag microblaze nios2 ope
 	@echo "Compiling linux ($(@F))..."
 	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
 	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
+
+dtbs: linux_dtbs
 endif
 
 $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
