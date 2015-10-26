@@ -2,7 +2,7 @@ OUTPUTDIR	?= output
 
 kimage		?= $(CONFIG_IMAGE)
 KDEFCONFIG	?= tinyconfig
-KIMAGE		?= $(if $(kimage),$(kimage),zImage)
+KIMAGE		?= $(if $(kimage),$(kimage),$(archimage))
 KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 KEXTRADEFCONFIG	+= initramfs.cfg
 
