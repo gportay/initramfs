@@ -21,10 +21,12 @@ $(KOUTPUT)/.config: linux/Makefile
 	@exit 1
 
 ifneq (,$(findstring $(karch),arc arm arm64 c6x h8300 metag microblaze nios2 openrisc powerpc sparc))
-%.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dts
+$(KOUTPUT)/arch/arm/boot/dts/%.dtb:
 	@echo "Compiling linux ($(@F))..."
-	make -C linux O=$(CURDIR)/$(KOUTPUT) $@
-	cp $(KOUTPUT)/arch/$(karch)/boot/dts/$@ .
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $(@F)
+
+%.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dtb
+	cp $< .
 
 dtbs: linux_dtbs
 endif
