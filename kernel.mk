@@ -42,6 +42,14 @@ kernel_menuconfig linux_menuconfig:
 kernel_download linux_download:
 	wget -qO- https://www.kernel.org/index.html | sed -n '/<td id="latest_link"/,/<\/td>/s,.*<a.*href="\(.*\)">\(.*\)</a>.*,wget -qO- \1 | tar xvJ \&\& ln -sf linux-\2 linux,p' | sh
 
+kernel_configure linux_configure:
+	make -f Makefile $(KOUTPUT)/.config
+
+kernel_compile linux_compile:
+	make -f Makefile $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
+
+kernel_clean linux_clean:
+	make -C linux mrproper
 
 clean::
 	rm -f $(KIMAGE)
