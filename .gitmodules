@@ -10,3 +10,6 @@
 [submodule "kconfig-frontends"]
 	path = kconfig-frontends
 	url = git://ymorin.is-a-geek.org/kconfig-frontends
+[submodule "dropbear"]
+	path = dropbear
+	url = git@github.com:mkj/dropbear.git
