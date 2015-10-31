@@ -25,7 +25,7 @@
 all::
 
 KIMAGE		?= bzImage
-QEMUOPTS	+= -netdev tap,id=net0,helper=/usr/libexec/qemu-bridge-helper -device virtio-net-pci,netdev=net0,id=nic1
+QEMUOPTS	+= -netdev tap,id=net0,helper=qemu-bridge-helper -device virtio-net-pci,netdev=net0,id=nic1
 QEMUOPT_APPEND	?= console=ttyS0 earlyprintk
 
 ifeq ($(firstword $(MAKEFILE_LIST)),runqemu.mk)
