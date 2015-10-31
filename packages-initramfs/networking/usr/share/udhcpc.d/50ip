@@ -47,6 +47,7 @@ case "$1" in
 			done
 
 			for i in $router ; do
+				echo "adding router $i"
 				ip route add default via $i dev $interface metric $((metric++))
 			done
 			ip route add 169.254.0.0/16 dev $interface metric $((metric++))
