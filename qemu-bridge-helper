@@ -1,0 +1,3 @@
+#!/bin/sh
+
+exec echo $* | sed -e 's,=br,=virbr,' | xargs /usr/libexec/qemu-bridge-helper
