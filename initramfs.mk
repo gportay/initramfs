@@ -14,4 +14,3 @@ include toybox.mk
 include input-eventd.mk
 include kexec-tools.mk
 include dropbear.mk
-include kernel.mk
