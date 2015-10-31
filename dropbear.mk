@@ -23,6 +23,17 @@ packages-initramfs/dropbear/etc/init.d/dropbear:
 
 install-initramfs/dropbear.tgz: packages-initramfs/dropbear/usr/bin/dropbearmulti packages-initramfs/dropbear/etc/init.d/dropbear
 
+ifeq (,$(CROSS_COMPILE))
+dropbear/dropbearkey: dropbear/dropbearmulti
+	ln -sf $(<F) $@
+
+packages-initramfs/dropbear/etc/dropbear/dropbear_%_host_key: dropbear/dropbearkey
+	install -d $(@D)/
+	$< -t $* -f $@
+
+install-initramfs/dropbear.tgz:: packages-initramfs/dropbear/etc/dropbear/dropbear_rsa_host_key packages-initramfs/dropbear/etc/dropbear/dropbear_dss_host_key packages-initramfs/dropbear/etc/dropbear/dropbear_ecdsa_host_key
+endif
+
 dropbear_%::
 	make -C dropbear $*
 
