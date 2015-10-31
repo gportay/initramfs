@@ -36,7 +36,6 @@ endchoice
 
 config BUSYBOX
 	bool "Busybox - The Swiss Army Knife of Embedded Linux"
-	default n
 	help
 	  BusyBox combines tiny versions of many common UNIX utilities into a
 	  single small executable. It provides replacements for most of the
