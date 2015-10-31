@@ -22,11 +22,17 @@ CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 ifneq (,$(CROSS_COMPILE))
 CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
-arch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
+karch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
+else
+karch		:= $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
+					  -e s/sun4u/sparc64/ \
+					  -e s/arm.*/arm/ -e s/sa110/arm/ \
+					  -e s/s390x/s390/ -e s/parisc64/parisc/ \
+					  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
+					  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ )
 endif
 
-arch		?= $(shell uname -m)
-export ARCH = $(arch)
+export ARCH = $(karch)
 
 ifeq ($(CONFIG_HAVE_DOT_CONFIG),y)
 all:: initramfs.cpio

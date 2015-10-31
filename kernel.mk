@@ -1,32 +1,68 @@
+OUTPUTDIR	?= output
+
 kimage		?= $(CONFIG_IMAGE)
 KIMAGE		?= $(if $(kimage),$(kimage),zImage)
+KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 
-%.dtb: linux/arch/$(arch)/boot/dts/%.dts
-	@echo "Building $@ for $(ARCH)..."
-	make -C linux $@
-	cp linux/arch/$(arch)/boot/dts/$@ .
+linux/Makefile:
+	@echo "You need to provide your own kernel sources into the $(CURDIR)/$(@D) directory!" >&2
+	@echo "Have a look at https://www.kernel.org! or run one of the commands below:" >&2
+	@echo "$$ git clone git@github.com:torvalds/linux.git $(CURDIR)/$(@D)" >&2
+	@echo "or" >&2
+	@echo "$$ make $(@D)_download" >&2
+	@exit 1
+
+$(KOUTPUT)/.config: linux/Makefile
+	@echo "You need to configure your kernel using a defconfig file!" >&2
+	@echo "Run one of the commands below:" >&2
+	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) menuconfig" >&2
+	@echo "or" >&2
+	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) tinyconfig" >&2
+	@exit 1
+
+ifneq (,$(findstring $(karch),arc arm arm64 c6x h8300 metag microblaze nios2 openrisc powerpc sparc))
+$(KOUTPUT)/arch/arm/boot/dts/%.dtb:
+	@echo "Compiling linux ($(@F))..."
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $(@F)
+
+%.dtb: $(KOUTPUT)/arch/$(karch)/boot/dts/%.dtb
+	cp $< .
+
+dtbs: linux_dtbs
+endif
+
+$(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE): initramfs.cpio $(KOUTPUT)/.config
+	@echo "Compiling linux ($(@F))..."
+	make -C linux O=$(CURDIR)/$(KOUTPUT) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/$< $(@F)
+
+$(KIMAGE): $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
+	cp $< $@
+
+kernel: $(KIMAGE)
 
 kernel_% linux_%:
-	make -C linux $*
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $*
 
 kernel_menuconfig linux_menuconfig:
 
-linux/.config:
-	@echo "You need to provide your own kernel sources into the ./linux directory!"
-	@echo "Have a look at https://www.kernel.org!"
-	@exit 1
+kernel_download linux_download:
+	wget -qO- https://www.kernel.org/index.html | sed -n '/<td id="latest_link"/,/<\/td>/s,.*<a.*href="\(.*\)">\(.*\)</a>.*,wget -qO- \1 | tar xvJ \&\& ln -sf linux-\2 linux,p' | sh
 
-linux/arch/$(arch)/boot/$(KIMAGE): initramfs.cpio linux/.config
-	@echo "Building $(KIMAGE) for $(ARCH)..."
-	make -C linux $(@F) CONFIG_INITRAMFS_SOURCE=../$<
+kernel_configure linux_configure:
+	make -f Makefile $(KOUTPUT)/.config
 
-$(KIMAGE): linux/arch/$(arch)/boot/$(KIMAGE)
-	cp linux/arch/$(arch)/boot/$@ $@
+kernel_compile linux_compile:
+	make -f Makefile $(KOUTPUT)/arch/$(karch)/boot/$(KIMAGE)
 
-kernel: $(KIMAGE)
+kernel_clean linux_clean:
+	make -C linux mrproper
 
 clean::
 	rm -f $(KIMAGE)
 
+cleanall::
+	rm -rf $(KOUTPUT)/
+
 mrproper::
 	rm -f *Image *.dtb
+	rm -rf $(OUTPUTDIR)/linux-*/
