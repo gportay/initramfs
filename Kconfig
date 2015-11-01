@@ -169,6 +169,16 @@ config KEXEC_TOOLS
 	  Make sure you have selected CONFIG_KEXEC=y when configuring the
 	  kernel. The CONFIG_KEXEC option enables the kexec system call.
 
+config DROPBEAR
+	bool "dropbear - relatively small SSH server and client"
+	default n
+	help
+	  Dropbear is a relatively small SSH server and client. It runs on a
+	  variety of POSIX-based platforms. Dropbear is open source software,
+	  distributed under a MIT-style license. Dropbear is particularly
+	  useful for "embedded"-type Linux (or other Unix) systems, such as
+	  wireless routers.
+
 config INPUT_EVENTD
 	bool "input-eventd - basic daemon for input-event devices"
 	default y
