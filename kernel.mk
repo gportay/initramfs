@@ -11,6 +11,12 @@ ifeq (x86_64,$(shell uname -m))
 KEXTRACFG	+= CONFIG_64BIT=y
 endif
 
+# Optimize for embedded targets
+ifneq (,$(CROSS_COMPILE))
+KEXTRACFG	+= CONFIG_EMBEDDED=y
+KEXTRACFG	+= CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+endif
+
 ifneq (,$(KEXTRACFG))
 KEXTRADEFCONFIG	+= local-$(karch).cfg
 
