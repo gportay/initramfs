@@ -33,6 +33,9 @@ all:: runqemu
 
 help::
 	@echo  'Usage: runqemu.mk [KIMAGE=zImage] [QEMUOPT_APPEND="console=ttyS0 earlyprintk"] [QEMUOPTS=-nographic]'
+else
+include kernel.mk
+KEXTRADEFCONFIG	+= qemu-console.cfg
 endif
 
 .PHONY:: runqemu
