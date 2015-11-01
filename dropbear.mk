@@ -21,7 +21,7 @@ packages-initramfs/dropbear/etc/init.d/dropbear:
 	cp dropbear/debian/dropbear.init $@
 	chmod a+x $@
 
-install-initramfs/dropbear.tgz: packages-initramfs/dropbear/usr/bin/dropbearmulti packages-initramfs/dropbear/etc/init.d/dropbear
+install-initramfs/dropbear.tgz:: packages-initramfs/dropbear/usr/bin/dropbearmulti packages-initramfs/dropbear/etc/init.d/dropbear
 
 ifeq (,$(CROSS_COMPILE))
 dropbear/dropbearkey: dropbear/dropbearmulti
