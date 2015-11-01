@@ -26,6 +26,12 @@ KEXTRADEFCONFIG	+= local-$(karch).cfg
 local-$(karch).cfg:
 	echo "# Automatically generated file." >local-$(karch).cfg
 	for cfg in $(KEXTRACFG); do echo $$cfg >>local-$(karch).cfg; done
+
+cleanall::
+	rm -f local-$(karch).cfg
+
+mrproper::
+	rm -f local-*.cfg
 endif
 
 linux/Makefile:
