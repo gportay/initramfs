@@ -23,6 +23,7 @@ ifneq (,$(CROSS_COMPILE))
 CC = $(CROSS_COMPILE)gcc
 host := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-$$,,')
 karch := $(shell echo "$(CROSS_COMPILE)" | sed -e 's,-.*$$,,1')
+archimage := zImage
 else
 karch		:= $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 					  -e s/sun4u/sparc64/ \
@@ -30,6 +31,7 @@ karch		:= $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 					  -e s/s390x/s390/ -e s/parisc64/parisc/ \
 					  -e s/ppc.*/powerpc/ -e s/mips.*/mips/ \
 					  -e s/sh[234].*/sh/ -e s/aarch64.*/arm64/ )
+archimage	:= bzImage
 endif
 
 export ARCH = $(karch)

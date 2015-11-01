@@ -1,8 +1,32 @@
 OUTPUTDIR	?= output
 
 kimage		?= $(CONFIG_IMAGE)
-KIMAGE		?= $(if $(kimage),$(kimage),zImage)
+KDEFCONFIG	?= tinyconfig
+KIMAGE		?= $(if $(kimage),$(kimage),$(archimage))
 KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
+KEXTRADEFCONFIG	+= initramfs.cfg
+
+# Enable 64-bits support for x86 target
+ifeq (x86_64,$(shell uname -m))
+KEXTRACFG	+= CONFIG_64BIT=y
+endif
+
+# Optimize for embedded targets
+ifneq (,$(CROSS_COMPILE))
+KEXTRACFG	+= CONFIG_EMBEDDED=y
+KEXTRACFG	+= CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+endif
+
+# Required by login to set groups
+KEXTRACFG	+= CONFIG_MULTIUSER=y
+
+ifneq (,$(KEXTRACFG))
+KEXTRADEFCONFIG	+= local-$(karch).cfg
+
+local-$(karch).cfg:
+	echo "# Automatically generated file." >local-$(karch).cfg
+	for cfg in $(KEXTRACFG); do echo $$cfg >>local-$(karch).cfg; done
+endif
 
 linux/Makefile:
 	@echo "You need to provide your own kernel sources into the $(CURDIR)/$(@D) directory!" >&2
@@ -12,6 +36,13 @@ linux/Makefile:
 	@echo "$$ make $(@D)_download" >&2
 	@exit 1
 
+ifeq (,$(CROSS_COMPILE))
+$(KOUTPUT)/.config: linux/Makefile $(KEXTRADEFCONFIG)
+	@echo "Configuring linux using $(KDEFCONFIG) and extra $(KEXTRADEFCONFIG)..."
+	install -d $(@D)
+	make -C linux O=$(CURDIR)/$(KOUTPUT) $(KDEFCONFIG)
+	cd linux && scripts/kconfig/merge_config.sh -O $(CURDIR)/$(KOUTPUT) $(CURDIR)/$@ $(patsubst %,$(CURDIR)/%,$(KEXTRADEFCONFIG))
+else
 $(KOUTPUT)/.config: linux/Makefile
 	@echo "You need to configure your kernel using a defconfig file!" >&2
 	@echo "Run one of the commands below:" >&2
@@ -19,6 +50,7 @@ $(KOUTPUT)/.config: linux/Makefile
 	@echo "or" >&2
 	@echo "$$ make -C linux O=$(CURDIR)/$(@D) ARCH=$(karch) tinyconfig" >&2
 	@exit 1
+endif
 
 ifneq (,$(findstring $(karch),arc arm arm64 c6x h8300 metag microblaze nios2 openrisc powerpc sparc))
 $(KOUTPUT)/arch/arm/boot/dts/%.dtb:
