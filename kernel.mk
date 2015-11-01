@@ -17,6 +17,9 @@ KEXTRACFG	+= CONFIG_EMBEDDED=y
 KEXTRACFG	+= CONFIG_CC_OPTIMIZE_FOR_SIZE=y
 endif
 
+# Required by login to set groups
+KEXTRACFG	+= CONFIG_MULTIUSER=y
+
 ifneq (,$(KEXTRACFG))
 KEXTRADEFCONFIG	+= local-$(karch).cfg
 
