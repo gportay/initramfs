@@ -6,6 +6,14 @@ KIMAGE		?= $(if $(kimage),$(kimage),zImage)
 KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 KEXTRADEFCONFIG	+= initramfs.cfg
 
+ifneq (,$(KEXTRACFG))
+KEXTRADEFCONFIG	+= local-$(karch).cfg
+
+local-$(karch).cfg:
+	echo "# Automatically generated file." >local-$(karch).cfg
+	for cfg in $(KEXTRACFG); do echo $$cfg >>local-$(karch).cfg; done
+endif
+
 linux/Makefile:
 	@echo "You need to provide your own kernel sources into the $(CURDIR)/$(@D) directory!" >&2
 	@echo "Have a look at https://www.kernel.org! or run one of the commands below:" >&2
