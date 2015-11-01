@@ -36,6 +36,7 @@ help::
 else
 include kernel.mk
 KEXTRADEFCONFIG	+= qemu-console.cfg
+KEXTRADEFCONFIG	+= qemu-networking.cfg
 endif
 
 .PHONY:: runqemu
