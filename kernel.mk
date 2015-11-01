@@ -6,6 +6,11 @@ KIMAGE		?= $(if $(kimage),$(kimage),$(archimage))
 KOUTPUT		?= $(OUTPUTDIR)/linux-$(karch)
 KEXTRADEFCONFIG	+= initramfs.cfg
 
+# Enable 64-bits support for x86 target
+ifeq (x86_64,$(shell uname -m))
+KEXTRACFG	+= CONFIG_64BIT=y
+endif
+
 ifneq (,$(KEXTRACFG))
 KEXTRADEFCONFIG	+= local-$(karch).cfg
 
