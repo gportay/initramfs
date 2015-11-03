@@ -1,5 +1,14 @@
 #!/bin/sh
 
 # Populate device mount point
-echo /sbin/mdev >/proc/sys/kernel/hotplug
+if [ -e /proc/sys/kernel/hotplug ]; then
+	echo /sbin/mdev >/proc/sys/kernel/hotplug
+else
+	echo "mdev: Warning: kernel has not been compiled with uevent helper!"
+	echo "      Check for CONFIG_UEVENT_HELPER and"
+	echo "                CONFIG_UEVENT_HELPER_PATH."
+	echo "mdev: The /dev mount-point will not be automatically populated."
+	echo "      You will have to run 'mdev -s' manually!"
+fi >&2
+
 mdev -s
