@@ -26,9 +26,9 @@ EOF
 }
 
 . /etc/init.d/mount-linuxfs
+. /etc/init.d/console
 . /etc/init.d/mdev
 . /etc/init.d/mount-tmp
-. /etc/init.d/console
 . /etc/init.d/oops
 
 while [ $# -ne 0 ]; do
