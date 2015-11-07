@@ -1,22 +1,17 @@
 #!/bin/sh
 
-echo initial >/dev/ttyS0
-ls -l /proc/$$/fd >/dev/ttyS0
+#if [ -e /dev/ttyS0 ]; then
+#	exec >/dev/ttyS0 2>/dev/ttyS0
+#fi
 
-tty=/dev/console
-if [ -e /dev/tty ]; then
-	tty=$(cttyhack || echo /dev/console)
-	echo tty=$tty >/dev/ttyS0
-fi
+echo "before exec" >>/dev/ttyAT0
+ls -l /proc/$$/fd >>/dev/ttyAT0
 
-echo before exec >/dev/ttyS0
-ls -l /proc/$$/fd >/dev/ttyS0
+if [ -e /dev/tty ] && [ tty=$(cttyhack) ] && echo tty=$tty && [ -n "$tty" ]; then
+	export LOGIN="/sbin/getty $tty 115200"
+	exec >$tty 2>&1 <$tty
+fi >>/dev/ttyAT0 2>&1
+cttyhack >>/dev/ttyAT0 || true
 
-exec  <$tty
-exec  >$tty
-exec 2>$tty
-
-echo after exec >/dev/ttyS0
-ls -l /proc/$$/fd >/dev/ttyS0
-
-export LOGIN="/sbin/getty $tty 115200"
+echo "after exec" >>/dev/ttyAT0
+ls -l /proc/$$/fd >>/dev/ttyAT0

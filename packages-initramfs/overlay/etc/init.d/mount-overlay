@@ -12,4 +12,5 @@ for d in $upperdir $workdir; do
 done
 
 echo "Mounting overlay directory to $mountdir..."
+echo mount -olowerdir=$lowerdir,upperdir=$upperdir,workdir=$workdir -t overlay overlay $mountdir $MOUNTOPTS
 mount -olowerdir=$lowerdir,upperdir=$upperdir,workdir=$workdir -t overlay overlay $mountdir $MOUNTOPTS

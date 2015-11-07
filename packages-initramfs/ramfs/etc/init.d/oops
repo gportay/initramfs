@@ -4,15 +4,19 @@
 oops() {
 	[ $? -eq 0 -a $$ -ne 1 ] && return
 
+set -x
 	login=$LOGIN
+echo "login=$login" >>/dev/ttyAT0
 	if [ -z "$login" ]; then
 		tty=$(cttyhack | sed -e 's,^/dev/,,')
+echo "tty=$tty" >>/dev/ttyAT0
 		if [ -n "$tty" -a "$tty" != tty ]; then
 			login="/sbin/getty $tty 115200"
 		else
 			login="/bin/login -p"
 		fi
 	fi
+echo "login=$login" >>/dev/ttyAT0
 
 	while true; do
 		$login || err=$?

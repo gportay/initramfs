@@ -12,52 +12,76 @@ usage() {
 Usage: ${0##*/} [OPTIONS]
 
 Options:
- persistentdir=DIR      Set persistent mount point [default: /media/persistent]
+ init=INIT              Set init [default: first match in
+                        /sbin/init /etc/init /bin/init /bin/sh].
+ persistentdir=DIR      Set persistent mount point [default: /media/persistent].
  persistentopts=OPTS    Set persistent mount options [ex: -osync].
  chrootdir=DIR          Set chroot directory [default: /media/chroot].
  chrootopts=OPTS        Setplay this message.
 EOF
 }
 
-. /etc/init.d/mount-linuxfs
-. /etc/init.d/mdev
-. /etc/init.d/console
-. /etc/init.d/oops
+. /etc/init.d/mount-linuxfs >>/log 2>&1
+. /etc/init.d/mdev >>/log 2>&1
+cat /log >>/dev/ttyAT0
+echo "$$: $0 $*" >>/dev/ttyAT0
+set -e
+. /etc/init.d/console >>/dev/ttyAT0 2>&1
+echo "$$: $0 $*" >>/dev/ttyAT0
+. /etc/init.d/oops >>/dev/ttyAT0 2>&1
 
-PERSISTENTDIR=/media/persistent
-CHROOTDIR=/media/chroot
+echo "$$: $0 $*" >>/dev/ttyAT0
+
+set -x
+
+echo "$$: $0 $*" >>/dev/ttyAT0
+
+persistentdir=/media/persistent
+chrootdir=/media/chroot
 while [ $# -ne 0 ]; do
 	if echo "$1" | grep -qE "^ramfs\.[a-zA-Z0-9_]+="; then
 		v=$(echo $1 | cut -d. -f2)
 		var=$(echo $v | cut -d= -f1 | sed -e 's,.,\U&,g')
 		val=$(echo $v | cut -d= -f2)
+		echo $1: $var=$val >/dev/ttyS0
 		export $var=$val
+	elif echo "$1" | grep -qE "^ramfs\.[a-zA-Z0-9_]"; then
+		v=$(echo $1 | cut -d. -f2)
+		var=$(echo $v | cut -d= -f1 | sed -e 's,.,\U&,g')
+		echo $1: $var=1 >/dev/ttyS0
+		export $var
 	else
 		initargs="$initargs $1"
 	fi
 	shift
 done
 
-echo "Mounting persistent directory to $PERSISTENTDIR..."
-MOUNTDIR=$PERSISTENTDIR MOUNTOPTS=$PERSISTENTOPTS \
-/etc/init.d/mount-persistent start
+if [ "${DISABLED:-0}" = 1 ]; then
+echo "Mounting persistent directory to $persistentdir..." >>/dev/ttyAT0 2>&1
+MOUNTDIR=$persistentdir MOUNTOPTS=$PERSISTENTOPTS \
+/etc/init.d/mount-persistent start >>/dev/ttyAT0 2>&1
 
-echo "Mounting overlay directory to $CHROOTDIR..."
-MOUNTDIR=$CHROOTDIR PERSISTENTDIR=$PERSISTENTDIR MOUNTOPTS=$OVERLAYOPTS \
-/etc/init.d/mount-overlay start
+echo "Mounting overlay directory to $chrootdir..." >>/dev/ttyAT0 2>&1
+MOUNTDIR=$chrootdir PERSISTENTDIR=$persistentdir MOUNTOPTS=$OVERLAYOPTS \
+/etc/init.d/mount-overlay start >>/dev/ttyAT0 2>&1
+fi
+
+mount >>/dev/ttyAT0 2>&1
 
 for init in /sbin/init /etc/init /bin/init /bin/sh; do
-	[ -e $CHROOTDIR/$init ] && break
+	[ -e $chrootdir$init ] && break
 done
 
-install -d $CHROOTDIR
-echo "Installing chroot to $CHROOTDIR..."
+echo "init=$init" >>/dev/ttyAT0 2>&1
+
+install -d $chrootdir
+echo "Installing chroot to $chrootdir..." >>/dev/ttyAT0 2>&1
 for dir in /dev /dev/pts /sys /proc; do
-	mount -o bind $dir $CHROOTDIR$dir
-done
+	mount -o bind $dir $chrootdir$dir
+done >>/dev/ttyAT0 2>&1
 
 echo "Chrooting to $chrootdir..."
-chroot=$CHROOTDIR exec chroot $CHROOTDIR $init $initargs
+chrootdir=$chrootdir exec chroot $chrootdir $init $initargs >>/dev/ttyAT0 2>&1
 
 echo "Oops... ${0##*/} is about to exit!" >&2
 exit 1

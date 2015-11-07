@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+VOLNAME=${2:-kernel}
+export NAME="volname $VOLNAME"
+export DESC="UBI upgrade loop"
+export PIDFILE="/var/run/${0##*/}-$volname.pid"
+export HELP="[VOLNAME=kernel]"
+/usr/share/init.d/${0##*/} $*
