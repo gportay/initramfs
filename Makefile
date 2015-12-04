@@ -12,8 +12,7 @@ include dir.mk
 include autotools.mk
 
 PREFIX ?= /usr
-TMPDIR ?= /tmp
-tmpdir := $(shell mktemp -d $(TMPDIR)/initramfs-XXXXXX)
+OUTPUTDIR	?= output
 
 prefix := $(PREFIX)
 
@@ -73,43 +72,42 @@ install-initramfs/%.tgz:
 	@echo "Building package $*..."
 	( cd packages-initramfs/$* && tar czf ../../$@ --exclude=.gitignore * )
 
-$(tmpdir)/ramfs: $(tgz-y)
+$(OUTPUTDIR)/ramfs: $(tgz-y)
 	@for tgz in $(tgz-y); do echo " - $${tgz##*/}"; done
 	install -d $@
 	for dir in install-initramfs $(extradir); do find $$dir/ -name "*.tgz" -exec tar xzf {} -C $@ \;; done
 
-$(tmpdir)/ramfs/init $(tmpdir)/ramfs/linuxrc:
+$(OUTPUTDIR)/ramfs/init $(OUTPUTDIR)/ramfs/linuxrc:
 	ln -sf etc/init $@
 
-$(tmpdir)/ramfs/initrd:
+$(OUTPUTDIR)/ramfs/initrd:
 	install -d $@
 
-$(tmpdir)/ramfs/dev/initrd:
+$(OUTPUTDIR)/ramfs/dev/initrd:
 	fakeroot -- mknod -m 400 $@ b 1 250
 
-$(tmpdir)/ramfs/dev/console:
+$(OUTPUTDIR)/ramfs/dev/console:
 	fakeroot -- mknod -m 622 $@ c 5 1
 
 initramfs.cpio.gz initrd.cpio.gz:
 
-initramfs.cpio: $(tmpdir)/ramfs $(tmpdir)/ramfs/init $(tmpdir)/ramfs/dev/console
+initramfs.cpio: $(OUTPUTDIR)/ramfs $(OUTPUTDIR)/ramfs/init $(OUTPUTDIR)/ramfs/dev/console
 
-initrd.cpio initrd.squashfs: $(tmpdir)/ramfs $(tmpdir)/ramfs/linuxrc $(tmpdir)/ramfs/initrd $(tmpdir)/ramfs/dev/initrd
+initrd.cpio initrd.squashfs: $(OUTPUTDIR)/ramfs $(OUTPUTDIR)/ramfs/linuxrc $(OUTPUTDIR)/ramfs/initrd $(OUTPUTDIR)/ramfs/dev/initrd
 
 %.cpio:
 	cd $< && find . | cpio -H newc -o -R root:root >$(CURDIR)/$@
-	rm -Rf $(<D)
 
 %.squashfs:
 	mksquashfs $< $@ -all-root
-	rm -Rf $(<D)
 
 %.gz: %
 	gzip -9 $*
 
 clean::
-	rm -f install-*/*.tgz initramfs.cpio initrd.cpio initrd.squashfs
+	rm -f install-*/*.tgz $(OUTPUTDIR)/ramfs/ initramfs.cpio initrd.cpio initrd.squashfs
 
 reallyclean:: clean
 
 mrproper:: reallyclean
+	rm -f $(OUTPUTDIR)/

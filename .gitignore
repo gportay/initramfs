@@ -5,4 +5,5 @@ packages-initramfs/toybox/
 packages-initramfs/input-event.d/
 packages-initramfs/kexec-tools/
 linux*/
+output/ramfs/
 output/linux-*/
